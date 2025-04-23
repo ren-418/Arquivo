@@ -3,7 +3,7 @@ import { Account } from '@/types';
 
 // Create an axios instance with default configuration
 const api = axios.create({
-    baseURL: 'http://127.0.0.1:8282',
+    baseURL: 'http://172.233.123.242:8080/api',
     headers: {
         'Content-Type': 'application/json',
     },
