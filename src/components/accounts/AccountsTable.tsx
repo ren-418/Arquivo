@@ -174,10 +174,10 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ data, isLoading, onDelete
                 phone: account.phone,
             });
 
-            toast.success("Starting Browser");
+            // toast.success("Starting Browser");
         } catch (error) {
             console.error('Failed to start browser:', error);
-            toast.error("Failed to start browser");
+            // toast.error("Failed to start browser");
         }
     }, []);
     return (
@@ -296,7 +296,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ data, isLoading, onDelete
                                                     className="h-6 w-6 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
                                                     onClick={() => {
                                                         navigator.clipboard.writeText(account.password);
-                                                        toast.info("Password copied to clipboard")
+                                                        // toast.info("Password copied to clipboard")
                                                     }}
                                                 >
                                                     <span className="text-xs">Copy</span>
@@ -324,7 +324,7 @@ const AccountsTable: React.FC<AccountsTableProps> = ({ data, isLoading, onDelete
                                                                     className="h-5 w-5"
                                                                     onClick={() => {
                                                                         navigator.clipboard.writeText(account.card_number);
-                                                                        toast.info("Card number copied to clipboard")
+                                                                        // toast.info("Card number copied to clipboard")
                                                                     }}
                                                                 >
                                                                     <span className="text-xs">Copy</span>

@@ -17,7 +17,7 @@ export function useAccounts() {
             setAccounts(data);
         } catch (err) {
             setError('Failed to load accounts. Please try again later.');
-            toast.error("Failed to load accounts. Please try again later.")
+            // toast.error("Failed to load accounts. Please try again later.")
         } finally {
             setIsLoading(false);
         }
@@ -27,12 +27,12 @@ export function useAccounts() {
     const handleAddAccounts = useCallback(async (accountsData: string[]) => {
         try {
             await addAccounts(accountsData);
-            toast.success("Accounts added successfully!")
+            // toast.success("Accounts added successfully!")
             // Reload accounts after adding
             loadAccounts();
             return true;
         } catch (err) {
-            toast.error("Failed to add accounts. Please try again.")
+            // toast.error("Failed to add accounts. Please try again.")
             return false;
         }
     }, [loadAccounts]);
@@ -41,12 +41,12 @@ export function useAccounts() {
     const handleDeleteAccount = useCallback(async (email: string) => {
         try {
             await deleteAccount(email);
-            toast.success("Account deleted successfully!")
+            // toast.success("Account deleted successfully!")
             // Reload accounts after deletion
             loadAccounts();
             return true;
         } catch (err) {
-            toast.error("Failed to delete account. Please try again.")
+            // toast.error("Failed to delete account. Please try again.")
             return false;
         }
     }, [loadAccounts]);

@@ -10,19 +10,19 @@ const api = axios.create({
 });
 
 export const dropCart = async (taskId: string, cartId: number) => {
-    const response = await api.post(`/tasks/${taskId}/carts/${cartId}/drop`);
+    const response = await api.post(`/event/${taskId}/carts/${cartId}/drop`);
     return response.data;
 };
 
 export const checkoutCart = async (taskId: string, cartId: number) => {
-    const response = await api.post(`/tasks/${taskId}/carts/${cartId}/checkout`);
+    const response = await api.post(`/event/${taskId}/carts/${cartId}/checkout`);
     return response.data;
 };
 
 // Function to fetch all events
 export const fetchEvents = async (): Promise<EventsResponse> => {
     try {
-        const response = await api.get('/tasks');
+        const response = await api.get('/events');
         return response.data;
     } catch (error) {
         console.error('Error fetching events:', error);
@@ -33,7 +33,7 @@ export const fetchEvents = async (): Promise<EventsResponse> => {
 // Function to fetch a single event by ID
 export const fetchEventById = async (eventId: string): Promise<{ task: Event }> => {
     try {
-        const response = await api.get(`/tasks/${eventId}`);
+        const response = await api.get(`/event/${eventId}`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching event with ID ${eventId}:`, error);
@@ -43,7 +43,7 @@ export const fetchEventById = async (eventId: string): Promise<{ task: Event }> 
 
 export const enableCarting = async (eventId: string): Promise<{ task: Event }> => {
     try {
-        const response = await api.post(`/tasks/${eventId}/enable-carting`);
+        const response = await api.post(`/event/${eventId}/enable-carting`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching event with ID ${eventId}:`, error);
@@ -54,7 +54,7 @@ export const enableCarting = async (eventId: string): Promise<{ task: Event }> =
 
 export const enableQuickPicks = async (eventId: string): Promise<{ task: Event }> => {
     try {
-        const response = await api.post(`/tasks/${eventId}/enable-quickpicks`);
+        const response = await api.post(`/event/${eventId}/enable-quickpicks`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching event with ID ${eventId}:`, error);
@@ -64,7 +64,7 @@ export const enableQuickPicks = async (eventId: string): Promise<{ task: Event }
 
 export const enableQB = async (eventId: string): Promise<{ task: Event }> => {
     try {
-        const response = await api.post(`/tasks/${eventId}/enable-qb`);
+        const response = await api.post(`/events/${eventId}/enable-qb`);
         return response.data;
     } catch (error) {
         console.error(`Error fetching event with ID ${eventId}:`, error);
@@ -75,7 +75,7 @@ export const enableQB = async (eventId: string): Promise<{ task: Event }> => {
 // Function to add a new event
 export const addEvent = async (eventData: AddEventPayload): Promise<any> => {
     try {
-        const response = await api.post('/tasks', eventData);
+        const response = await api.post('/event', eventData);
         return response.data;
     } catch (error) {
         console.error('Error adding event:', error);
@@ -86,7 +86,7 @@ export const addEvent = async (eventData: AddEventPayload): Promise<any> => {
 // Function to delete an event
 export const deleteEvent = async (eventId: string): Promise<any> => {
     try {
-        const response = await api.delete(`/tasks/${eventId}`);
+        const response = await api.delete(`/event/${eventId}`);
         return response.data;
     } catch (error) {
         console.error('Error deleting event:', error);

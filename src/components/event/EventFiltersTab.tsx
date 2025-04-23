@@ -215,7 +215,7 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
         } catch (error) {
             setFilters([]);
             console.error('Failed to fetch filters:', error);
-            toast.error("Failed to load filters");
+            // toast.error("Failed to load filters");
         } finally {
             setIsRefreshing(false);
         }
@@ -267,10 +267,10 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                 //  clearMapSelections(svgContainerRef);
             }
 
-            toast.success("Filter added successfully")
+            // toast.success("Filter added successfully")
         } catch (error) {
             console.error('Failed to add filter:', error);
-            toast.error("Failed to add filter")
+            // toast.error("Failed to add filter")
         } finally {
             setLoading(false);
         }
@@ -285,10 +285,10 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
             await apiRemoveFilter(taskID, id);
             setFilters(filters.filter(filter => filter.id !== id));
 
-            toast.success("Filter removed successfully")
+            // toast.success("Filter removed successfully")
         } catch (error) {
             console.error('Failed to delete filter:', error);
-            toast.error("Failed to delete filter")
+            // toast.error("Failed to delete filter")
         } finally {
             setLoading(false);
         }
@@ -310,7 +310,7 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
 
         } catch (error) {
             console.error('Failed to update filter order:', error);
-            toast.error("Failed to update filter order");
+            // toast.error("Failed to update filter order");
 
             // Revert to original order if there's an error
             fetchFilters();
@@ -325,10 +325,10 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
             setLoading(true);
             await dropNonMatchingCarts(taskID);
 
-            toast.success("Non-matching carted tickets have been dropped")
+            // toast.success("Non-matching carted tickets have been dropped")
         } catch (error) {
             console.error('Failed to drop non-matching carts:', error);
-            toast.error("Failed to drop non-matching carted tickets")
+            // toast.error("Failed to drop non-matching carted tickets")
         } finally {
             setLoading(false);
         }

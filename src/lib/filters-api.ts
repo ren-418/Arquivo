@@ -5,7 +5,7 @@ import { Filter } from '@/types';
  * Fetch all filters for an event
  */
 export const getFilters = async (taskId: string) => {
-    const response = await api.get(`/tasks/${taskId}/filters`);
+    const response = await api.get(`/events/${taskId}/filters`);
     return response.data.filters;
 };
 
@@ -13,7 +13,7 @@ export const getFilters = async (taskId: string) => {
  * Add a new filter to an event
  */
 export const addFilter = async (taskId: string, filter: Omit<Filter, 'id'>) => {
-    const response = await api.post(`/tasks/${taskId}/filters`, filter);
+    const response = await api.post(`/events/${taskId}/filters`, filter);
     return response.data;
 };
 
@@ -21,7 +21,7 @@ export const addFilter = async (taskId: string, filter: Omit<Filter, 'id'>) => {
  * Remove a filter from an event
  */
 export const removeFilter = async (taskId: string, filterId: string) => {
-    const response = await api.delete(`/tasks/${taskId}/filters/${filterId}`);
+    const response = await api.delete(`/events/${taskId}/filters/${filterId}`);
     return response.data;
 };
 
@@ -29,7 +29,7 @@ export const removeFilter = async (taskId: string, filterId: string) => {
  * Drop tickets that don't match current filters
  */
 export const dropNonMatchingCarts = async (taskId: string) => {
-    const response = await api.get(`/tasks/${taskId}/filters/drop`);
+    const response = await api.get(`/events/${taskId}/filters/drop`);
     return response.data;
 };
 
@@ -37,6 +37,6 @@ export const dropNonMatchingCarts = async (taskId: string) => {
  * Reset all filters for an event
  */
 export const resetFilters = async (taskId: string) => {
-    const response = await api.delete(`/tasks/${taskId}/filters`);
+    const response = await api.delete(`/events/${taskId}/filters`);
     return response.data;
 };

@@ -97,7 +97,7 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                 setLoading(false);
             } catch (error) {
                 console.error('Failed to process checked out tickets:', error);
-                toast.error("Failed to load checked out tickets");
+                // toast.error("Failed to load checked out tickets");
                 setLoading(false);
             }
         };
@@ -132,7 +132,7 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
 
     // Handle ticket download
     const handleDownloadTicket = (ticket: CheckedOutTicket) => {
-        toast.success(`Ticket for ${ticket.email} downloaded`);
+        // toast.success(`Ticket for ${ticket.email} downloaded`);
         // Implement actual download functionality
     };
 
@@ -291,7 +291,7 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
                                     target.src = '/placeholder-map.png';
-                                    toast.error("Failed to load seat map");
+                                    // toast.error("Failed to load seat map");
                                 }}
                             />
                         ) : (

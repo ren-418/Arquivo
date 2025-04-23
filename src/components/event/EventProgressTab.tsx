@@ -280,7 +280,7 @@ const EventProgressTab: React.FC<EventProgressTabProps> = ({
                                                         className="h-6 w-6 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
                                                         onClick={() => {
                                                             navigator.clipboard.writeText(account.password);
-                                                            toast.info("Password copied to clipboard")
+                                                            // toast.info("Password copied to clipboard")
                                                         }}
                                                     >
                                                         <span className="text-xs">Copy</span>

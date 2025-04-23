@@ -28,7 +28,7 @@ export function useCheckoutsData(eventId: string) {
             const errorMessage = handleApiError(err, 'Failed to load checkout data');
             setError(errorMessage);
             console.error('Error fetching checkout data:', err);
-            toast.error(errorMessage);
+            // toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }

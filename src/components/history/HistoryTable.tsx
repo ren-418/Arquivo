@@ -261,7 +261,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
                                     onClick={() => {
                                         if (selectedEventId) {
                                             onDelete(selectedEventId);
-                                            toast.info(`Event deleted successfully`);
+                                            // toast.info(`Event deleted successfully`);
                                         }
                                         setIsDeleteDialogOpen(false);
                                     }}
@@ -418,7 +418,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         navigator.clipboard.writeText(event.venue);
-                                                        toast.info("Venue copied to clipboard");
+                                                        // toast.info("Venue copied to clipboard");
                                                     }}
                                                 >
                                                     <span className="text-xs">Copy</span>
@@ -446,7 +446,7 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
                                                             className="cursor-pointer"
                                                             onClick={() => {
                                                                 if (onExport) onExport(event.id);
-                                                                toast.info(`Exporting event data...`);
+                                                                // toast.info(`Exporting event data...`);
                                                             }}
                                                         >
                                                             <ExternalLink className="h-4 w-4 mr-2" />

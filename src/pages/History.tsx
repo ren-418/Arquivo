@@ -22,20 +22,20 @@ const HistoryPage: React.FC = () => {
     const handleDeleteEvent = async (eventId: string) => {
         try {
             await deleteEvent(eventId);
-            toast.success("The event has been removed from your history.");
+            // toast.success("The event has been removed from your history.");
         } catch (error) {
-            toast.error("Failed to delete event. Please try again.");
+            // toast.error("Failed to delete event. Please try again.");
         }
     };
 
     // Optional handlers for additional actions
     const handleExportEvent = (eventId: string) => {
-        toast.success(`Exporting event ${eventId}...`);
+        // toast.success(`Exporting event ${eventId}...`);
         // Implementation would go here
     };
 
     const handleDuplicateEvent = (eventId: string) => {
-        toast.success(`Duplicating event ${eventId}...`);
+        // toast.success(`Duplicating event ${eventId}...`);
         // Implementation would go here
     };
 

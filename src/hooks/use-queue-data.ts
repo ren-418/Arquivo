@@ -28,7 +28,7 @@ export function useQueueData(eventId: string) {
       const errorMessage = handleApiError(err, 'Failed to load queue data');
       setError(errorMessage);
       console.error('Error fetching queue data:', err);
-      toast.error(errorMessage);
+      // toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

@@ -33,21 +33,21 @@ export function useEventPresaleCodes(eventId: string) {
             const validCodes = codes.filter(code => code.trim().length > 0);
 
             if (validCodes.length === 0) {
-                toast.error("No valid presale codes provided.")
+                // toast.error("No valid presale codes provided.")
                 setIsSubmitting(false);
                 return false;
             }
 
             await addEventPresaleCodes(eventId, validCodes, areGeneric);
 
-            toast.success(`Added ${validCodes.length} presale code(s).`)
+            // toast.success(`Added ${validCodes.length} presale code(s).`)
 
             // Refresh the list of presale codes
             await loadPresaleCodes();
             return true;
         } catch (err) {
             setError('Failed to add presale codes. Please try again.');
-            toast.error("Failed to add presale codes. Please try again.")
+            // toast.error("Failed to add presale codes. Please try again.")
             return false;
         } finally {
             setIsSubmitting(false);
@@ -61,14 +61,14 @@ export function useEventPresaleCodes(eventId: string) {
         try {
             await clearEventPresaleCodes(eventId);
 
-            toast.success("All presale codes have been cleared.")
+            // toast.success("All presale codes have been cleared.")
 
             // Reset the local state
             setPresaleCodes([]);
             return true;
         } catch (err) {
             setError('Failed to clear presale codes. Please try again.');
-            toast.error("Failed to clear presale codes. Please try again.")
+            // toast.error("Failed to clear presale codes. Please try again.")
             return false;
         } finally {
             setIsSubmitting(false);
@@ -82,11 +82,11 @@ export function useEventPresaleCodes(eventId: string) {
         try {
             await loadPresaleCodes();
 
-            toast.success("Presale codes rechecked successfully.")
+            // toast.success("Presale codes rechecked successfully.")
             return true;
         } catch (err) {
             setError('Failed to recheck presale codes. Please try again.');
-            toast.error("Failed to recheck presale codes. Please try again.")
+            // toast.error("Failed to recheck presale codes. Please try again.")
             return false;
         } finally {
             setIsSubmitting(false);

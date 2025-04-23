@@ -87,10 +87,10 @@ const PresaleSetDetailModal: React.FC<PresaleSetDetailModalProps> = ({
                 .then(() => {
                     setIsCopied(true);
                     setTimeout(() => setIsCopied(false), 2000);
-                    toast.info("All presale codes copied to clipboard")
+                    // toast.info("All presale codes copied to clipboard")
                 })
                 .catch(() => {
-                    toast.error("Failed to copy to clipboard")
+                    // toast.error("Failed to copy to clipboard")
                 });
         }
     };
@@ -139,7 +139,7 @@ const PresaleSetDetailModal: React.FC<PresaleSetDetailModalProps> = ({
                     updatedAt: new Date().toISOString()
                 });
                 setIsEditMode(false);
-                toast.success("Presale code set updated successfully!")
+                // toast.success("Presale code set updated successfully!")
             }
         } catch (err) {
             setError('There was an error updating the presale code set.');
@@ -293,7 +293,7 @@ const PresaleSetDetailModal: React.FC<PresaleSetDetailModalProps> = ({
                                                         className="h-6 w-6 p-0"
                                                         onClick={() => {
                                                             navigator.clipboard.writeText(code);
-                                                            toast.info(`Code "${code}" copied to clipboard`)
+                                                            // toast.info(`Code "${code}" copied to clipboard`)
                                                         }}
                                                     >
                                                         <Copy className="h-3 w-3" />

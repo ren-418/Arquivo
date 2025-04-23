@@ -44,17 +44,17 @@ const EventDetail: React.FC = () => {
 
     // Action handlers
     const handleStartLooking = () => {
-        toast.info("Looking for seats for the event...");
+        // toast.info("Looking for seats for the event...");
         enableQuickPicks(eventId);
     };
 
     const handleStartCarting = () => {
-        toast.info("Starting Carting Process...");
+        // toast.info("Starting Carting Process...");
         enableCarting(eventId);
     };
 
     const handleEnableQB = () => {
-        toast.info("Enabled Queue Bypass");
+        // toast.info("Enabled Queue Bypass");
         enableQB(eventId);
     };
 

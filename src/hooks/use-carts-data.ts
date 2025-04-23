@@ -28,7 +28,7 @@ export function useCartsData(eventId: string) {
       const errorMessage = handleApiError(err, 'Failed to load cart data');
       setError(errorMessage);
       console.error('Error fetching cart data:', err);
-      toast.error(errorMessage);
+      // toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

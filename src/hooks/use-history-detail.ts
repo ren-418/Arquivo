@@ -29,7 +29,7 @@ export function useHistoryDetail(eventId: string) {
         } catch (err) {
             setError('Failed to load event details. Please try again later.');
             console.error('Error fetching event detail:', err);
-            toast.error('Failed to load event details');
+            // toast.error('Failed to load event details');
         } finally {
             setIsLoading(false);
         }

@@ -105,10 +105,10 @@ const EventPresaleCodesTab: React.FC<EventPresaleCodesTabProps> = ({ eventId }) 
 
             if (detail && detail.codes) {
                 setCodesText(detail.codes.join('\n'));
-                toast.success(`Loaded ${detail.codes.length} codes from "${detail.name}"`)
+                // toast.success(`Loaded ${detail.codes.length} codes from "${detail.name}"`)
             }
         } catch (err) {
-            toast.error('Failed to load saved presale codes')
+            // toast.error('Failed to load saved presale codes')
         } finally {
             setIsFetchingSavedCodes(false);
         }
@@ -122,7 +122,7 @@ const EventPresaleCodesTab: React.FC<EventPresaleCodesTabProps> = ({ eventId }) 
             .filter(line => line.length > 0);
 
         if (codes.length === 0) {
-            toast.error("Please enter at least one presale code")
+            // toast.error("Please enter at least one presale code")
             return;
         }
 
@@ -446,7 +446,7 @@ const EventPresaleCodesTab: React.FC<EventPresaleCodesTabProps> = ({ eventId }) 
                                                         className="h-6 w-6 ml-2 opacity-0 group-hover:opacity-100 transition-opacity"
                                                         onClick={() => {
                                                             navigator.clipboard.writeText(code.code);
-                                                            toast.info(`Copied "${code.code}" to clipboard`);
+                                                            // toast.info(`Copied "${code.code}" to clipboard`);
                                                         }}
                                                     >
                                                         <span className="text-xs">Copy</span>

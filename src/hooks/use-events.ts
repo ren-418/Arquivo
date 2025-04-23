@@ -20,7 +20,7 @@ export function useEvents() {
             setTableData(transformEventsToTableData(data));
         } catch (err) {
             setError('Failed to load events. Please try again later.');
-            toast.error('Failed to load events. Please try again later.');
+            // toast.error('Failed to load events. Please try again later.');
         } finally {
             setIsLoading(false);
         }
@@ -30,12 +30,12 @@ export function useEvents() {
     const handleAddEvent = useCallback(async (eventData: AddEventPayload) => {
         try {
             await addEvent(eventData);
-            toast.success('Event added successfully!');
+            // toast.success('Event added successfully!');
             // Reload events after adding
             loadEvents();
             return true;
         } catch (err) {
-            toast.error('Failed to add event. Please try again.');
+            // toast.error('Failed to add event. Please try again.');
             return false;
         }
     }, [loadEvents]);
@@ -44,12 +44,12 @@ export function useEvents() {
     const handleDeleteEvent = useCallback(async (eventId: string) => {
         try {
             await deleteEvent(eventId);
-            toast.success('Event deleted successfully!');
+            // toast.success('Event deleted successfully!');
             // Reload events after deletion
             loadEvents();
             return true;
         } catch (err) {
-            toast.error('Failed to delete event. Please try again.');
+            // toast.error('Failed to delete event. Please try again.');
             return false;
         }
     }, [loadEvents]);

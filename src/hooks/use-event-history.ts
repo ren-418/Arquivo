@@ -21,7 +21,7 @@ export function useEventHistory() {
             const errorMessage = handleApiError(err, 'Failed to load event history');
             setError(errorMessage);
             console.error('Error fetching events:', err);
-            toast.error(errorMessage);
+            // toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -33,12 +33,12 @@ export function useEventHistory() {
             await HistoryService.deleteHistory(eventId);
             // Update local state to remove deleted event
             setEvents(prev => prev.filter(event => event.id !== eventId));
-            toast.success("Event deleted successfully");
+            // toast.success("Event deleted successfully");
             return true;
         } catch (err) {
             const errorMessage = handleApiError(err, 'Failed to delete event');
             console.error('Error deleting event:', err);
-            toast.error(errorMessage);
+            // toast.error(errorMessage);
             throw err;
         }
     }, []);

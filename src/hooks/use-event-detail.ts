@@ -18,7 +18,7 @@ export function useEventDetail(eventId: string) {
             setEventDetail(response.task);
         } catch (err) {
             setError('Failed to load event details. Please try again later.');
-            toast.error("Failed to load event details. Please try again later.")
+            // toast.error("Failed to load event details. Please try again later.")
         } finally {
             setIsLoading(false);
         }
@@ -42,7 +42,7 @@ export function useEventDetail(eventId: string) {
                 // Only show the error toast once, not on every failed poll
                 if (!error) {
                     setError('Failed to refresh event data. Will keep trying...');
-                    toast.error("Failed to refresh event data. Will keep trying...")
+                    // toast.error("Failed to refresh event data. Will keep trying...")
                 }
             }
         }, 1000); // Poll every second

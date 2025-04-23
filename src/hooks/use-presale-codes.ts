@@ -17,7 +17,7 @@ export function usePresaleCodes() {
             setPresaleCodeSets(response.presales);
         } catch (err) {
             setError('Failed to load presale code sets. Please try again later.');
-            toast.error("Failed to load presale code sets. Please try again later.");
+            // toast.error("Failed to load presale code sets. Please try again later.");
         } finally {
             setIsLoading(false);
         }
@@ -29,7 +29,7 @@ export function usePresaleCodes() {
             const response = await fetchPresaleCodeSetDetail(id);
             return response.presale;
         } catch (err) {
-            toast.error("Failed to load presale code set details. Please try again.")
+            // toast.error("Failed to load presale code set details. Please try again.")
             return null;
         }
     }, []);
@@ -38,12 +38,12 @@ export function usePresaleCodes() {
     const addNewPresaleCodeSet = useCallback(async (data: AddPresaleCodeSetPayload): Promise<boolean> => {
         try {
             await addPresaleCodeSet(data);
-            toast.success("Presale code set added successfully!")
+            // toast.success("Presale code set added successfully!")
             // Reload presale code sets after adding
             loadPresaleCodeSets();
             return true;
         } catch (err) {
-            toast.error("Failed to add presale code set. Please try again.")
+            // toast.error("Failed to add presale code set. Please try again.")
             return false;
         }
     }, [loadPresaleCodeSets]);
@@ -52,12 +52,12 @@ export function usePresaleCodes() {
     const updateExistingPresaleCodeSet = useCallback(async (id: number, data: UpdatePresaleCodeSetPayload): Promise<boolean> => {
         try {
             await updatePresaleCodeSet(id, data);
-            toast.success("Presale code set updated successfully!")
+            // toast.success("Presale code set updated successfully!")
             // Reload presale code sets after updating
             loadPresaleCodeSets();
             return true;
         } catch (err) {
-            toast.error("Failed to update presale code set. Please try again.")
+            // toast.error("Failed to update presale code set. Please try again.")
             return false;
         }
     }, [loadPresaleCodeSets]);
@@ -66,12 +66,12 @@ export function usePresaleCodes() {
     const deleteExistingPresaleCodeSet = useCallback(async (id: number): Promise<boolean> => {
         try {
             await deletePresaleCodeSet(id);
-            toast.success("Presale code set deleted successfully!")
+            // toast.success("Presale code set deleted successfully!")
             // Reload presale code sets after deletion
             loadPresaleCodeSets();
             return true;
         } catch (err) {
-            toast.error("Failed to delete presale code set. Please try again.")
+            // toast.error("Failed to delete presale code set. Please try again.")
             return false;
         }
     }, [loadPresaleCodeSets]);

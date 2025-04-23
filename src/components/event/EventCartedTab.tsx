@@ -276,7 +276,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         window.electron.ipcRenderer.on('checkout-ended', markClosed);
         window.electron.ipcRenderer.on('checkout-failed', markClosed);
         window.electron.ipcRenderer.on('checkout-already-open', () => {
-            toast.info("Checkout already open for that cart");
+            // toast.info("Checkout already open for that cart");
         });
 
         return () => {
@@ -375,7 +375,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             phone: ticket.phone,
         });
 
-        toast.success("Starting manual checkout process");
+        // toast.success("Starting manual checkout process");
     }, []);
 
 
@@ -399,14 +399,14 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             }
 
             await checkoutCart(eventId, accountIndex);
-            toast.success("Ticket checked out successfully");
+            // toast.success("Ticket checked out successfully");
 
             // No need to update cartedTickets state as it's derived from accounts
             // which will be updated via the useEventDetail polling
 
         } catch (error) {
             console.error('Failed to checkout ticket:', error);
-            toast.error("Failed to checkout ticket");
+            // toast.error("Failed to checkout ticket");
         } finally {
             setLoading(false);
         }
@@ -432,14 +432,14 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             }
 
             await dropCart(eventId, accountIndex);
-            toast.success("Ticket dropped successfully");
+            // toast.success("Ticket dropped successfully");
 
             // No need to update cartedTickets state as it's derived from accounts
             // which will be updated via the useEventDetail polling
 
         } catch (error) {
             console.error('Failed to drop ticket:', error);
-            toast.error("Failed to drop ticket");
+            // toast.error("Failed to drop ticket");
         } finally {
             setLoading(false);
         }
@@ -471,10 +471,10 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             // Clear selection
             setSelectedTickets([]);
 
-            toast.success(`${selectedTickets.length} ticket(s) checked out successfully`);
+            // toast.success(`${selectedTickets.length} ticket(s) checked out successfully`);
         } catch (error) {
             console.error('Failed to checkout tickets:', error);
-            toast.error("Failed to checkout some tickets");
+            // toast.error("Failed to checkout some tickets");
         } finally {
             setLoading(false);
         }
@@ -505,10 +505,10 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             // Clear selection
             setSelectedTickets([]);
 
-            toast.success(`${selectedTickets.length} ticket(s) dropped successfully`);
+            // toast.success(`${selectedTickets.length} ticket(s) dropped successfully`);
         } catch (error) {
             console.error('Failed to drop tickets:', error);
-            toast.error("Failed to drop some tickets");
+            // toast.error("Failed to drop some tickets");
         } finally {
             setLoading(false);
         }

@@ -223,7 +223,7 @@ export const QueueTable: React.FC<QueueTableProps> = ({ eventId, onExport }) => 
                                             size="icon"
                                             onClick={() => {
                                                 if (onExport) onExport();
-                                                toast.success("Exporting queue data...");
+                                                // toast.success("Exporting queue data...");
                                             }}
                                         >
                                             <Download className="h-4 w-4" />
@@ -366,7 +366,7 @@ export const QueueTable: React.FC<QueueTableProps> = ({ eventId, onExport }) => 
                                                             className="h-6 w-6 ml-2 opacity-0 group-hover/email:opacity-100 transition-opacity"
                                                             onClick={() => {
                                                                 navigator.clipboard.writeText(item.email);
-                                                                toast.info("Email copied to clipboard");
+                                                                // toast.info("Email copied to clipboard");
                                                             }}
                                                         >
                                                             <span className="text-xs">Copy</span>
@@ -385,7 +385,7 @@ export const QueueTable: React.FC<QueueTableProps> = ({ eventId, onExport }) => 
                                                             className="h-6 w-6 ml-2 opacity-0 group-hover/password:opacity-100 transition-opacity"
                                                             onClick={() => {
                                                                 navigator.clipboard.writeText(item.password);
-                                                                toast.info("Password copied to clipboard");
+                                                                // toast.info("Password copied to clipboard");
                                                             }}
                                                         >
                                                             <span className="text-xs">Copy</span>
