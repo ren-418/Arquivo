@@ -1,15 +1,15 @@
-// hooks/use-queue-data.ts
+// hooks/use-carts-data.ts
 import { useState, useEffect, useCallback } from 'react';
-import { QueueItem } from '@/types/history';
+import { CartItem } from '@/@types/history';
 import { toast } from 'sonner';
-import { HistoryService, handleApiError, withRetry } from '@/lib/api';
+import { HistoryService, handleApiError, withRetry } from '@/rest-api/api';
 
-export function useQueueData(eventId: string) {
-  const [queueData, setQueueData] = useState<QueueItem[] | null>(null);
+export function useCartsData(eventId: string) {
+  const [cartsData, setCartsData] = useState<CartItem[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch queue data
+  // Fetch carts data
   const fetchData = useCallback(async () => {
     if (!eventId) {
       setError('Event ID is required');
@@ -22,12 +22,12 @@ export function useQueueData(eventId: string) {
     
     try {
       // Use the service with retry mechanism
-      const data = await withRetry(() => HistoryService.getQueueData(eventId));
-      setQueueData(data);
+      const data = await withRetry(() => HistoryService.getCartData(eventId));
+      setCartsData(data);
     } catch (err) {
-      const errorMessage = handleApiError(err, 'Failed to load queue data');
+      const errorMessage = handleApiError(err, 'Failed to load cart data');
       setError(errorMessage);
-      console.error('Error fetching queue data:', err);
+      console.error('Error fetching cart data:', err);
       // toast.error(errorMessage);
     } finally {
       setIsLoading(false);
@@ -40,9 +40,9 @@ export function useQueueData(eventId: string) {
   }, [fetchData]);
 
   return {
-    queueData,
+    cartsData,
     isLoading,
     error,
-    refreshQueueData: fetchData
+    refreshCartsData: fetchData
   };
 }

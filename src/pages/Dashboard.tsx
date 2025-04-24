@@ -1,9 +1,9 @@
 import React from 'react';
 import EventTable from '@/components/dashboard/EventTable';
 import AddEventButton from '@/components/dashboard/AddEventButton';
-import { useEvents } from '@/hooks/use-events';
+import { useEvents } from '@/custom-hooks/use-events';
 import { motion } from 'framer-motion';
-import PageTitle from '@/shared/PageTitle';
+import PageTitle from '@/components/PageTitle';
 
 const Dashboard: React.FC = () => {
     const {

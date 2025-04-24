@@ -13,7 +13,7 @@ import { Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Label } from '@/components/ui/label';
-import { AddPresaleCodeSetPayload } from '@/types';
+import { AddPresaleCodeSetPayload } from '@/@types';
 
 interface AddPresaleSetModalProps {
     isOpen: boolean;

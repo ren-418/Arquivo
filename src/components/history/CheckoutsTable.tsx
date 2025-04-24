@@ -30,7 +30,7 @@ import {
     MapPin,
     Rows
 } from 'lucide-react';
-import { useCheckoutsData } from '@/hooks/use-checkouts-data';
+import { useCheckoutsData } from '@/custom-hooks/use-checkouts-data';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Tooltip,

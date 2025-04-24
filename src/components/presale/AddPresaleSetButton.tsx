@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import AddPresaleSetModal from './AddPresaleSetModal';
 import { motion } from 'framer-motion';
-import { AddPresaleCodeSetPayload } from '@/types';
+import { AddPresaleCodeSetPayload } from '@/@types';
 
 interface AddPresaleSetButtonProps {
     onAddPresaleSet: (data: AddPresaleCodeSetPayload) => Promise<boolean>;

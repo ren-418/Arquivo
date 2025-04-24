@@ -23,7 +23,7 @@ import {
     DialogFooter,
     DialogClose
 } from '@/components/ui/dialog';
-import { useEventDetail } from '@/hooks/use-event-detail';
+import { useEventDetail } from '@/custom-hooks/use-event-detail';
 import { Input } from '@/components/ui/input';
 import TruncatedTextCell from '../TruncatedTextCell';
 

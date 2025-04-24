@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddEventPayload, EventsResponse, Event } from '@/types';
+import { AddEventPayload, EventsResponse, Event } from '@/@types';
 
 // Create an axios instance with default configuration
 const api = axios.create({

@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "./SideBar";
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 
 export default function BaseLayout({

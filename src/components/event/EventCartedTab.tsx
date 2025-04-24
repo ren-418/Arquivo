@@ -20,7 +20,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { formatCountdown } from '@/lib/utils';
+import { formatCountdown } from '@/utils/utils';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -41,8 +41,8 @@ import {
     DialogFooter,
     DialogClose
 } from '@/components/ui/dialog';
-import { useEventDetail } from '@/hooks/use-event-detail';
-import { dropCart, checkoutCart } from '@/lib/api';
+import { useEventDetail } from '@/custom-hooks/use-event-detail';
+import { dropCart, checkoutCart } from '@/rest-api/api';
 import { isEqual } from 'lodash';
 
 // Types

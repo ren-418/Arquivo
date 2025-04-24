@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { HistoryTable } from '@/components/history/HistoryTable';
 import { Button } from '@/components/ui/button';
 import { PlusCircle, Calendar, ListFilter } from 'lucide-react';
-import { useEventHistory } from '@/hooks/use-event-history';
+import { useEventHistory } from '@/custom-hooks/use-event-history';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 

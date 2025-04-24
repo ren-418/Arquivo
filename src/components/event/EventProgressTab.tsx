@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Account } from '@/types';
+import { Account } from '@/@types';
 import { ArrowUpDown, Search, Mail, Lock, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {

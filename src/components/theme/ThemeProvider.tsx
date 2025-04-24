@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ThemeMode, getCurrentTheme, setTheme, syncThemeWithLocal } from '@/lib/theme';
+import { ThemeMode, getCurrentTheme, setTheme, syncThemeWithLocal } from '@/utils/theme';
 
 interface ThemeContextType {
     theme: ThemeMode;

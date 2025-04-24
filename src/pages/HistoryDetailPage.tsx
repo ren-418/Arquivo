@@ -10,7 +10,7 @@ import { QueueTable } from '@/components/history/QueueTable';
 import { CartsTable } from '@/components/history/CartsTable';
 import { CheckoutsTable } from '@/components/history/CheckoutsTable';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useHistoryDetail } from '@/hooks/use-history-detail';
+import { useHistoryDetail } from '@/custom-hooks/use-history-detail';
 
 const HistoryDetailPage: React.FC = () => {
     const params = useParams({ from: '/history/$eventId' });

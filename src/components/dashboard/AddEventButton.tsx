@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import AddEventModal from './AddEventModal';
-import { AddEventPayload } from '@/types';
+import { AddEventPayload } from '@/@types';
 import { motion } from 'framer-motion';
 
 interface AddEventButtonProps {

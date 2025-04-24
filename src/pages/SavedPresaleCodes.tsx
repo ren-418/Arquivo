@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { usePresaleCodes } from '@/hooks/use-presale-codes';
+import { usePresaleCodes } from '@/custom-hooks/use-presale-codes';
 import { motion } from 'framer-motion';
 import PresaleCodesTable from '@/components/presale/PresaleCodesTable';
 import AddPresaleSetButton from '@/components/presale/AddPresaleSetButton';
 import PresaleSetDetailModal from '@/components/presale/PresaleSetDetailModal';
-import PageTitle from '@/shared/PageTitle';
+import PageTitle from '@/components/PageTitle';
 
 const SavedPresaleCodes: React.FC = () => {
     const {

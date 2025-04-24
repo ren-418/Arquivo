@@ -1,7 +1,7 @@
 // hooks/use-history-detail.ts
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
-import { HistoryEventDetail } from '@/types/history';
+import { HistoryEventDetail } from '@/@types/history';
 import { toast } from 'sonner';
 
 // API endpoint for history

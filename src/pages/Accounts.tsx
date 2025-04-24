@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import AccountsTable from '@/components/accounts/AccountsTable';
 import AddAccountsButton from '@/components/accounts/AddAccountsButton';
-import { useAccounts } from '@/hooks/use-accounts';
+import { useAccounts } from '@/custom-hooks/use-accounts';
 import { motion } from 'framer-motion';
-import PageTitle from '@/shared/PageTitle';
+import PageTitle from '@/components/PageTitle';
 
 const Accounts: React.FC = () => {
+
     const {
         accounts,
         isLoading,
@@ -14,15 +15,9 @@ const Accounts: React.FC = () => {
         deleteAccount: handleDeleteAccount,
     } = useAccounts();
 
-    // Disable scrolling when component mounts
     useEffect(() => {
-        // Save original styles to restore later
         const originalStyle = window.getComputedStyle(document.body).overflow;
-
-        // Prevent scrolling on the body
         document.body.style.overflow = 'hidden';
-
-        // Cleanup function to restore scrolling when component unmounts
         return () => {
             document.body.style.overflow = originalStyle;
         };
@@ -35,7 +30,6 @@ const Accounts: React.FC = () => {
                 description="Manage your ticketing accounts"
                 rightContent={<AddAccountsButton onAddAccounts={handleAddAccounts} />}
             />
-
             {
                 error ? (
                     <motion.div
@@ -47,7 +41,6 @@ const Accounts: React.FC = () => {
                     </motion.div>
                 ) : null
             }
-
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { PresaleCode } from '@/types';
-import { fetchEventPresaleCodes, addEventPresaleCodes, clearEventPresaleCodes } from '@/lib/presale-api-event';
+import { PresaleCode } from '@/@types';
+import { fetchEventPresaleCodes, addEventPresaleCodes, clearEventPresaleCodes } from '@/rest-api/presale-api-event';
 import { toast } from 'sonner';
 
 export function useEventPresaleCodes(eventId: string) {

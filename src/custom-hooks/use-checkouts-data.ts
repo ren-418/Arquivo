@@ -1,8 +1,8 @@
 // hooks/use-checkouts-data.ts
 import { useState, useEffect, useCallback } from 'react';
-import { CheckoutItem } from '@/types/history';
+import { CheckoutItem } from '@/@types/history';
 import { toast } from 'sonner';
-import { HistoryService, handleApiError, withRetry } from '@/lib/api';
+import { HistoryService, handleApiError, withRetry } from '@/rest-api/api';
 
 export function useCheckoutsData(eventId: string) {
     const [checkoutsData, setCheckoutsData] = useState<CheckoutItem[] | null>(null);

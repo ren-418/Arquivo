@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchEvents, addEvent, deleteEvent } from '@/lib/api';
-import { transformEventsToTableData } from '@/lib/utils';
+import { fetchEvents, addEvent, deleteEvent } from '@/rest-api/api';
+import { transformEventsToTableData } from '@/utils/utils';
 import { toast } from "sonner"
-import { AddEventPayload, EventsResponse, EventTableItem } from '../types/index';
+import { AddEventPayload, EventsResponse, EventTableItem } from '../@types/index';
 
 export function useEvents() {
     const [eventsData, setEventsData] = useState<EventsResponse>({});

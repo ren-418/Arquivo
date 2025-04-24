@@ -30,7 +30,7 @@ import {
     Rows,
     SortAsc
 } from 'lucide-react';
-import { useCartsData } from '@/hooks/use-carts-data';
+import { useCartsData } from '@/custom-hooks/use-carts-data';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Tooltip,

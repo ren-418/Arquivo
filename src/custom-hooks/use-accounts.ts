@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Account } from '@/types';
-import { fetchAccounts, addAccounts, deleteAccount } from '@/lib/accounts-api';
+import { Account } from '@/@types';
+import { fetchAccounts, addAccounts, deleteAccount } from '@/rest-api/accounts-api';
 import { toast } from 'sonner';
 
 export function useAccounts() {

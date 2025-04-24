@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { useEventDetail } from '@/hooks/use-event-detail';
+import { useEventDetail } from '@/custom-hooks/use-event-detail';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -21,7 +21,7 @@ import EventProgressTab from '@/components/event/EventProgressTab';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useNavigate, useParams } from '@tanstack/react-router';
 import { toast } from 'sonner';
-import { enableCarting, enableQB, enableQuickPicks } from '@/lib/api';
+import { enableCarting, enableQB, enableQuickPicks } from '@/rest-api/api';
 import EventPresaleCodesTab from '@/components/event/EventPresaleCodesTab';
 import EventFiltersTab from '@/components/event/EventFiltersTab';
 import CartedTab from '@/components/event/EventCartedTab';

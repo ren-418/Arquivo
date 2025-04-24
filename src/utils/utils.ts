@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
-import { Event, EventTableItem } from "@/types";
+import { Event, EventTableItem } from "@/@types";
 
 // Utility for combining Tailwind classes
 export function cn(...inputs: ClassValue[]) {

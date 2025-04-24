@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PresaleCodeSet, PresaleCodeSetDetail, AddPresaleCodeSetPayload, UpdatePresaleCodeSetPayload } from '@/types';
+import { PresaleCodeSet, PresaleCodeSetDetail, AddPresaleCodeSetPayload, UpdatePresaleCodeSetPayload } from '@/@types';
 
 // Create an axios instance with default configuration
 const api = axios.create({

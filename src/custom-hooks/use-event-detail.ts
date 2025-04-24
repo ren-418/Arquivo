@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Event, Account } from '@/types';
-import { fetchEventById } from '@/lib/api';
+import { Event, Account } from '@/@types';
+import { fetchEventById } from '@/rest-api/api';
 import { toast } from 'sonner';
 
 export function useEventDetail(eventId: string) {

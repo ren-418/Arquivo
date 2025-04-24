@@ -1,5 +1,5 @@
 import api from './api';
-import { Filter } from '@/types';
+import { Filter } from '@/@types';
 
 /**
  * Fetch all filters for an event

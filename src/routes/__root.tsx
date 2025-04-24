@@ -10,7 +10,7 @@ export const RootRoute = createRootRoute({
 function Root() {
   return (
     <BaseLayout>
-      <Toaster />
+      {/* <Toaster /> */}
       <Outlet />
     </BaseLayout>
   );

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { EventTableItem } from '@/types';
+import { EventTableItem } from '@/@types';
 import { Trash, Calendar, MapPin, ExternalLink } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { motion, AnimatePresence } from 'framer-motion';

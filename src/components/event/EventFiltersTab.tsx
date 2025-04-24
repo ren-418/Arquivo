@@ -64,11 +64,11 @@ import {
     TabsTrigger,
 } from "@/components/ui/tabs";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Filter, TicketType } from '@/types';
+import { Filter, TicketType } from '@/@types';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { NumericInput } from '@/components/ui/numeric-input';
-import { loadVenueMap } from '@/lib/venue-map-utils';
-import { getFilters, addFilter as apiAddFilter, removeFilter as apiRemoveFilter, dropNonMatchingCarts } from '@/lib/filters-api'; // Added updateFilterOrder
+import { loadVenueMap } from '@/utils/venue-map-utils';
+import { getFilters, addFilter as apiAddFilter, removeFilter as apiRemoveFilter, dropNonMatchingCarts } from '@/rest-api/filters-api'; // Added updateFilterOrder
 import { toast } from 'sonner';
 
 interface EventFiltersTabProps {

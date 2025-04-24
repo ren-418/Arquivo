@@ -26,7 +26,7 @@ import {
     Download,
     Info
 } from 'lucide-react';
-import { useQueueData } from '@/hooks/use-queue-data';
+import { useQueueData } from '@/custom-hooks/use-queue-data';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     DropdownMenu,

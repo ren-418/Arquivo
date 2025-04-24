@@ -1,8 +1,8 @@
 // hooks/use-event-history.ts
 import { useState, useEffect, useCallback } from 'react';
-import { HistoryEvent } from '@/types/history';
+import { HistoryEvent } from '@/@types/history';
 import { toast } from 'sonner';
-import { HistoryService, handleApiError, withRetry } from "@/lib/api"
+import { HistoryService, handleApiError, withRetry } from "@/rest-api/api"
 
 export function useEventHistory() {
     const [events, setEvents] = useState<HistoryEvent[]>([]);

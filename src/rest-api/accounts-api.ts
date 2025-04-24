@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Account } from '@/types';
+import { Account } from '@/@types';
 
 // Create an axios instance with default configuration
 const api = axios.create({

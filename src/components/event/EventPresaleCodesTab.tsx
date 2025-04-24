@@ -24,11 +24,11 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Check, X, ArrowUpDown, Search, Ticket, RefreshCw, Trash } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PresaleCode, PresaleCodeSet } from '@/types';
-import { useEventPresaleCodes } from '@/hooks/use-event-presale-codes';
-import { usePresaleCodes } from '@/hooks/use-presale-codes';
+import { PresaleCode, PresaleCodeSet } from '@/@types';
+import { useEventPresaleCodes } from '@/custom-hooks/use-event-presale-codes';
+import { usePresaleCodes } from '@/custom-hooks/use-presale-codes';
 import { Separator } from '@/components/ui/separator';
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import {
     Pagination,
     PaginationContent,

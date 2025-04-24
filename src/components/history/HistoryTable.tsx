@@ -24,7 +24,7 @@ import {
     ExternalLink
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { HistoryEvent } from '@/types/history';
+import { HistoryEvent } from '@/@types/history';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { motion, AnimatePresence } from 'framer-motion';

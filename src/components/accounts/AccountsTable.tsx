@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Account } from '@/types';
+import { Account } from '@/@types';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { MoreHorizontal, ArrowUpDown, Trash, CreditCard, Mail, Lock, Globe, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

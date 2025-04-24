@@ -13,7 +13,7 @@ import { Loader2, AlertCircle, Edit, Copy, CheckCircle2, Ticket } from 'lucide-r
 import { motion, AnimatePresence } from 'framer-motion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Label } from '@/components/ui/label';
-import { PresaleCodeSetDetail, UpdatePresaleCodeSetPayload } from '@/types';
+import { PresaleCodeSetDetail, UpdatePresaleCodeSetPayload } from '@/@types';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { toast } from 'sonner';

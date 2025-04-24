@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PresaleCode } from '@/types';
+import { PresaleCode } from '@/@types';
 
 // Create an axios instance with default configuration
 const api = axios.create({
