@@ -120,8 +120,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     // Track which carts currently have an open browser window
     // Track which carts currently have an open browser window
     const [openCheckouts, setOpenCheckouts] = useState<Set<string>>(new Set());
-
-
     // Sorting state
     const [sortColumn, setSortColumn] = useState<SortableColumn>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -272,19 +270,19 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             });
         };
 
-        window.electron.ipcRenderer.on('checkout-started', markOpen);
-        window.electron.ipcRenderer.on('checkout-ended', markClosed);
-        window.electron.ipcRenderer.on('checkout-failed', markClosed);
-        window.electron.ipcRenderer.on('checkout-already-open', () => {
-            // toast.info("Checkout already open for that cart");
-        });
+        // window.electron.ipcRenderer.on('checkout-started', markOpen);
+        // window.electron.ipcRenderer.on('checkout-ended', markClosed);
+        // window.electron.ipcRenderer.on('checkout-failed', markClosed);
+        // window.electron.ipcRenderer.on('checkout-already-open', () => {
+        //     // toast.info("Checkout already open for that cart");
+        // });
 
-        return () => {
-            window.electron.ipcRenderer.removeListener('checkout-started', markOpen);
-            window.electron.ipcRenderer.removeListener('checkout-ended', markClosed);
-            window.electron.ipcRenderer.removeListener('checkout-failed', markClosed);
-            window.electron.ipcRenderer.removeListener('checkout-already-open', () => { });
-        };
+        // return () => {
+        //     window.electron.ipcRenderer.removeListener('checkout-started', markOpen);
+        //     window.electron.ipcRenderer.removeListener('checkout-ended', markClosed);
+        //     window.electron.ipcRenderer.removeListener('checkout-failed', markClosed);
+        //     window.electron.ipcRenderer.removeListener('checkout-already-open', () => { });
+        // };
     }, []);
 
     // 2️⃣ On every change to cartedTickets, ask “is–open?”
@@ -744,7 +742,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                         <ShoppingCart size={18} className="text-primary mr-2" />
                         Manage Tickets
                     </CardTitle>
-
                     {cartedTickets.length > 0 && (
                         <div className="flex items-center">
                             <div className="mr-4 flex items-center space-x-2">

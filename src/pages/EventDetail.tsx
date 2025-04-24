@@ -20,7 +20,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import EventProgressTab from '@/components/event/EventProgressTab';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useNavigate, useParams } from '@tanstack/react-router';
-import { toast } from 'sonner';
 import { enableCarting, enableQB, enableQuickPicks } from '@/rest-api/api';
 import EventPresaleCodesTab from '@/components/event/EventPresaleCodesTab';
 import EventFiltersTab from '@/components/event/EventFiltersTab';
@@ -114,7 +113,7 @@ const EventDetail: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <h1 className="text-3xl font-bold tracking-tight"><a target='_blank' href={eventDetail?.event_url}>{eventInfo?.name}</a></h1>
+                            <h1 className="text-3xl font-bold tracking-tight"><a target='_blank' href={eventDetail?.event_url}>{eventInfo?.event_name}</a></h1>
                             <div className="flex flex-wrap items-center gap-4 text-muted-foreground">
                                 <div className="flex items-center">
                                     <Calendar className="mr-2 h-4 w-4" />
@@ -204,7 +203,7 @@ const EventDetail: React.FC = () => {
                                     <>
                                         {eventDetail && (
 
-                                            <EventFiltersTab taskID={eventId} eventId={eventDetail.event_id || ''} sections={eventDetail.sections} rows={eventDetail.rows} ticket_types={eventDetail.ticket_types} map_id={eventDetail.map_id} />
+                                            <EventFiltersTab taskID={eventId} eventId={eventDetail.event_id || ''} sections={eventDetail.sections || []} rows={eventDetail.rows || []} ticket_types={eventDetail.ticket_types || []} map_id={eventDetail.map_id || ''} />
                                         )}
                                     </>
                                 )}

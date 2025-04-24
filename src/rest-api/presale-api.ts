@@ -12,8 +12,8 @@ const api = axios.create({
 // Function to fetch all presale code sets
 export const fetchPresaleCodeSets = async (): Promise<{ presales: PresaleCodeSet[] }> => {
     try {
-        const response = await api.get('/presales');
-        return response.data;
+        const response = await api.get('/presale_codes');
+        return response.data.presales_codes;
     } catch (error) {
         console.error('Error fetching presale code sets:', error);
         throw error;

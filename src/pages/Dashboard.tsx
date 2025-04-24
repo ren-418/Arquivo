@@ -13,7 +13,6 @@ const Dashboard: React.FC = () => {
         addEvent: handleAddEvent,
         deleteEvent: handleDeleteEvent,
     } = useEvents();
-
     return (
         <>
             <PageTitle

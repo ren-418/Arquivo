@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Event, Account } from '@/@types';
 import { fetchEventById } from '@/rest-api/api';
-import { toast } from 'sonner';
 
 export function useEventDetail(eventId: string) {
     const [eventDetail, setEventDetail] = useState<Event | null>(null);
@@ -15,7 +14,7 @@ export function useEventDetail(eventId: string) {
         setError(null);
         try {
             const response = await fetchEventById(eventId);
-            setEventDetail(response.task);
+            setEventDetail(response);
         } catch (err) {
             setError('Failed to load event details. Please try again later.');
             // toast.error("Failed to load event details. Please try again later.")
@@ -35,7 +34,7 @@ export function useEventDetail(eventId: string) {
         intervalRef.current = window.setInterval(async () => {
             try {
                 const response = await fetchEventById(eventId);
-                setEventDetail(response.task);
+                setEventDetail(response);
                 // Reset error state if the request succeeds after a previous error
                 if (error) setError(null);
             } catch (err) {
@@ -45,7 +44,7 @@ export function useEventDetail(eventId: string) {
                     // toast.error("Failed to refresh event data. Will keep trying...")
                 }
             }
-        }, 1000); // Poll every second
+        }, 5000); // Poll every 5 seconds
 
         // Cleanup function
         return () => {
@@ -89,7 +88,7 @@ export function useEventDetail(eventId: string) {
 
     // Extract event metadata
     const eventInfo = eventDetail ? {
-        name: eventDetail.name,
+        event_name: eventDetail.event_name,
         date: eventDetail.date,
         venue: eventDetail.venue,
         hasQueue: eventDetail.has_queue,

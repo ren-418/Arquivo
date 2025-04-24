@@ -51,7 +51,7 @@ export interface TicketType {
 export interface Event {
     event_url: string;
     event_id: string;
-    name: string;
+    event_name: string;
     date: string;
     map_id: string;
     eps_mgr: string;
@@ -85,11 +85,20 @@ export interface AddEventPayload {
 
 export interface EventTableItem {
     id: string;
-    name: string;
+    event_name: string;
     date: string;
     venue: string;
-    accountsCount: number;
+    accounts: number;
 }
+
+export interface EventApiResponse {
+    id: string;
+    event_name: string;
+    date: string;
+    venue: string;
+    accounts: number;
+}
+
 export interface PresaleCodeSet {
     id: number;
     name: string;
@@ -120,12 +129,13 @@ export interface PresaleCode {
     ticket_types?: string[];
     token: string;
     is_used: boolean;
-    are_generic: boolean;
+    is_generic: boolean;
     is_valid: boolean;
 }
 // Event filter types
 export interface Filter {
     id?: string;
+    priority: number;
     sections: string[];
     rows: string[];
     excluded_ticket_types: string[];

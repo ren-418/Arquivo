@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format } from "date-fns";
-import { Event, EventTableItem } from "@/@types";
+import { Event, EventTableItem, EventApiResponse } from "@/@types";
 
 // Utility for combining Tailwind classes
 export function cn(...inputs: ClassValue[]) {
@@ -33,18 +33,20 @@ export function formatDate(dateString: string): string {
 }
 
 // Count the number of accounts in an event
-export function countAccounts(event: Event): number {
-  return Object.keys(event.accounts || {}).length;
-}
+// export function countAccounts(event: EventApiResponse): number {
+//   console.log('event', event);
+//   return Object.keys(event.accounts || {}).length;
+// }
 
 // Transform events data to table format
-export function transformEventsToTableData(eventsData: Record<string, Event>): EventTableItem[] {
+export function transformEventsToTableData(eventsData: EventTableItem[]): EventTableItem[] {
+  
   return Object.entries(eventsData).map(([id, event]) => ({
-    id,
-    name: event.name,
+    id:event.id,
+    event_name: event.event_name,
     date: formatDate(event.date),
     venue: event.venue,
-    accountsCount: countAccounts(event),
+    accounts: event.accounts,
   }));
 }
 

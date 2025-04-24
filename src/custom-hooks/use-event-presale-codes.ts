@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { PresaleCode } from '@/@types';
-import { fetchEventPresaleCodes, addEventPresaleCodes, clearEventPresaleCodes } from '@/rest-api/presale-api-event';
+import { fetchEventPresaleCodes, addEventPresaleCodes, clearEventPresaleCodes, recheckEventPresaleCodes } from '@/rest-api/presale-api-event';
 import { toast } from 'sonner';
 
 export function useEventPresaleCodes(eventId: string) {
@@ -14,8 +14,8 @@ export function useEventPresaleCodes(eventId: string) {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetchEventPresaleCodes(eventId);
-            setPresaleCodes(response.codes || []);
+            const res = await fetchEventPresaleCodes(eventId);
+            setPresaleCodes(res || []);
         } catch (err) {
             setError('Failed to load presale codes. Please try again later.');
             console.error('Error loading presale codes:', err);
@@ -37,7 +37,7 @@ export function useEventPresaleCodes(eventId: string) {
                 setIsSubmitting(false);
                 return false;
             }
-
+            console.log("Adding presale codes:", validCodes, areGeneric);
             await addEventPresaleCodes(eventId, validCodes, areGeneric);
 
             // toast.success(`Added ${validCodes.length} presale code(s).`)
@@ -80,7 +80,7 @@ export function useEventPresaleCodes(eventId: string) {
         setIsSubmitting(true);
         setError(null);
         try {
-            await loadPresaleCodes();
+            await recheckEventPresaleCodes(eventId);
 
             // toast.success("Presale codes rechecked successfully.")
             return true;

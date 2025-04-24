@@ -68,7 +68,7 @@ import { Filter, TicketType } from '@/@types';
 import { MultiSelect } from '@/components/ui/multi-select';
 import { NumericInput } from '@/components/ui/numeric-input';
 import { loadVenueMap } from '@/utils/venue-map-utils';
-import { getFilters, addFilter as apiAddFilter, removeFilter as apiRemoveFilter, dropNonMatchingCarts } from '@/rest-api/filters-api'; // Added updateFilterOrder
+import { getFilters, addFilter as apiAddFilter, removeFilter as apiRemoveFilter, dropNonMatchingCarts, updateFilterOrder, updateFilter as apiUpdateFilter } from '@/rest-api/filters-api'; // Added updateFilterOrder
 import { toast } from 'sonner';
 
 interface EventFiltersTabProps {
@@ -97,8 +97,10 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
 
 
     // Filter form state
-    const [filterForm, setFilterForm] = useState<Omit<Filter, 'id'>>({
+    const [filterForm, setFilterForm] = useState<Filter>({
+        id: '',
         sections: [],
+        priority: 0,
         rows: [],
         excluded_ticket_types: [],
         min_price: 0,
@@ -249,9 +251,11 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
             await fetchFilters(); // Refresh from the server
 
             setIsFilterDialogOpen(false);
-
+            setIsEditing(false);
             // Reset form and selections
             setFilterForm({
+                id: '',
+                priority: 0,
                 sections: [],
                 rows: [],
                 excluded_ticket_types: [],
@@ -276,6 +280,26 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
         }
     };
 
+    // Update a filter
+    const updateFilter = async () => {
+        if (!taskID) return;
+        if (!filterForm.id) return;
+        console.log(' ::::: filterForm ::::: ', filterForm);
+        try {
+            setLoading(true);
+            await apiUpdateFilter(taskID, filterForm);
+            await fetchFilters(); // Refresh from the server
+
+            setIsFilterDialogOpen(false);
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Failed to update filter:', error);
+            // toast.error("Failed to update filter")
+        } finally {
+            setLoading(false);
+        }
+    };  
+
     // Delete a filter
     const deleteFilter = async (id: string) => {
         if (!taskID) return;
@@ -294,7 +318,7 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
         }
     };
 
-    // Handle filter reordering
+    // Handle filter reordering0
     const handleReorder = async (newOrder: Filter[]) => {
         if (!taskID) return;
 
@@ -302,11 +326,16 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
             setFilters(newOrder);
 
             // Get the ordered IDs to send to the backend
-            const orderedIds = newOrder.map(filter => filter.id);
+            const orderedIds = newOrder.map(filter => {
+                return {
+                    id: filter.id,
+                    priority: filter.priority
+                }
+            });
 
             // Call API to update filter order
             // This is a new function that would need to be added to your API
-            //await updateFilterOrder(eventId, orderedIds);
+            await updateFilterOrder(eventId, orderedIds);
 
         } catch (error) {
             console.error('Failed to update filter order:', error);
@@ -379,8 +408,11 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
     }));
 
     const openEditDialog = (filter: Filter) => {
+        if (!filter.id) return;
         setFilterForm({
+            id: filter.id,
             sections: filter.sections,
+            priority: filter.priority,
             rows: filter.rows,
             excluded_ticket_types: filter.excluded_ticket_types,
             min_price: filter.min_price,
@@ -436,7 +468,10 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                         </CardTitle>
 
                         <div className="flex space-x-2">
-                            <Dialog open={isFilterDialogOpen} onOpenChange={setIsFilterDialogOpen}>
+                            <Dialog open={isFilterDialogOpen} onOpenChange={() => {
+                                setIsFilterDialogOpen(!isFilterDialogOpen);
+                                setIsEditing(false);
+                            }}>
                                 <DialogTrigger asChild>
                                     <Button disabled={loading} className="gap-2">
                                         <Plus className="h-4 w-4" />
@@ -634,7 +669,6 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                                                             ></div>
                                                         </TransformComponent>
                                                     </TransformWrapper>
-
                                                 </div>
 
                                                 {/* Selected sections from the map */}
@@ -670,28 +704,59 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
 
                                     <DialogFooter className="mt-6">
                                         <Button
-                                            onClick={() => setIsFilterDialogOpen(false)}
+                                            onClick={() => {
+                                                setIsFilterDialogOpen(false);
+                                                setIsEditing(false);
+                                            }}
                                             variant="outline"
                                             disabled={loading}
                                         >
                                             Cancel
                                         </Button>
-                                        <Button
-                                            onClick={addFilter}
-                                            disabled={loading}
-                                        >
-                                            {loading ? (
-                                                <>
-                                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                                    Adding...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Plus className="h-4 w-4 mr-2" />
-                                                    Add Filter
-                                                </>
-                                            )}
-                                        </Button>
+                                        {isEditing ? (
+                                            <>
+                                                {loading ? (
+                                                    <Button
+                                                        disabled={true}
+                                                    >
+                                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                        Updating...
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        onClick={updateFilter}
+
+                                                    >
+                                                        <Plus className="h-4 w-4 mr-2" />
+                                                        Update Filter
+                                                    </Button>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {loading ? (
+                                                    <Button
+
+                                                        disabled={true}
+                                                    >
+                                                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                                        Adding...
+                                                    </Button>
+                                                ) : (
+                                                    <Button
+                                                        onClick={addFilter}
+
+                                                    >
+                                                        <Plus className="h-4 w-4 mr-2" />
+                                                        Add Filter
+                                                    </Button>
+                                                )}
+                                            </>
+
+                                        )}
+
+
+
                                     </DialogFooter>
                                 </DialogContent>
                             </Dialog>
@@ -777,7 +842,6 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                                     >
                                         <AnimatePresence>
                                             {filters.map((filter, index) => (
-
                                                 <Reorder.Item
                                                     key={filter.id}
                                                     value={filter}

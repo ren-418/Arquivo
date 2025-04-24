@@ -43,10 +43,10 @@ export const fetchEventById = async (eventId: string): Promise<{ task: Event }> 
 
 export const enableCarting = async (eventId: string): Promise<{ task: Event }> => {
     try {
-        const response = await api.post(`/event/${eventId}/enable-carting`);
+        const response = await api.post(`/event/${eventId}/carting/start`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching event with ID ${eventId}:`, error);
+        console.error(`Error enabling carting for event with ID ${eventId}:`, error);
         throw error;
     }
 };
@@ -54,10 +54,10 @@ export const enableCarting = async (eventId: string): Promise<{ task: Event }> =
 
 export const enableQuickPicks = async (eventId: string): Promise<{ task: Event }> => {
     try {
-        const response = await api.post(`/event/${eventId}/enable-quickpicks`);
+        const response = await api.post(`/event/${eventId}/availability/start`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching event with ID ${eventId}:`, error);
+        console.error(`Error enabling quick picks for event with ID ${eventId}:`, error);
         throw error;
     }
 };
@@ -86,7 +86,7 @@ export const addEvent = async (eventData: AddEventPayload): Promise<any> => {
 // Function to delete an event
 export const deleteEvent = async (eventId: string): Promise<any> => {
     try {
-        const response = await api.delete(`/event/${eventId}`);
+        const response = await api.delete(`/event?id=${eventId}`);
         return response.data;
     } catch (error) {
         console.error('Error deleting event:', error);

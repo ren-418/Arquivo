@@ -27,6 +27,8 @@ const EventTable: React.FC<EventTableProps> = ({ data, isLoading, onDelete }) =>
     const handleNavigateToEvent = (eventId: string) => {
         navigate({ to: '/event/$eventId', params: { eventId } })
     };
+    
+    console.log('EventTable data', data);
     return (
         <div className="w-full overflow-hidden rounded-md border">
             <Table>
@@ -90,7 +92,7 @@ const EventTable: React.FC<EventTableProps> = ({ data, isLoading, onDelete }) =>
                                                 transition={{ delay: 0.1, duration: 0.3 }}
                                                 className="w-2 h-2 rounded-full bg-primary"
                                             />
-                                            {event.name}
+                                            {event.event_name}
                                         </div>
                                     </TableCell>
                                     <TableCell>
@@ -107,7 +109,7 @@ const EventTable: React.FC<EventTableProps> = ({ data, isLoading, onDelete }) =>
                                     </TableCell>
                                     <TableCell>
                                         <Badge variant="secondary" className="font-normal">
-                                            {event.accountsCount} {event.accountsCount === 1 ? 'account' : 'accounts'}
+                                            {event.accounts} {event.accounts === 1 ? 'account' : 'accounts'}
                                         </Badge>
                                     </TableCell>
                                     <TableCell className="text-right">
@@ -140,7 +142,7 @@ const EventTable: React.FC<EventTableProps> = ({ data, isLoading, onDelete }) =>
                                                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                                         <AlertDialogDescription>
                                                             This action cannot be undone. This will permanently delete the event
-                                                            <span className="font-semibold"> {event.name} </span>
+                                                            <span className="font-semibold"> {event.event_name} </span>
                                                             and remove all associated accounts.
                                                         </AlertDialogDescription>
                                                     </AlertDialogHeader>
