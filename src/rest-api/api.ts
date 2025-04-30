@@ -1,23 +1,15 @@
 import axios from 'axios';
 import { AddEventPayload, EventsResponse, Event } from '@/@types';
 
+
 // Create an axios instance with default configuration
 const api = axios.create({
-    baseURL: 'http://172.233.123.242:8080/api',
+    baseURL: import.meta.env.VITE_BACKEND_API,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-export const dropCart = async (taskId: string, cartId: number) => {
-    const response = await api.post(`/event/${taskId}/carts/${cartId}/drop`);
-    return response.data;
-};
-
-export const checkoutCart = async (taskId: string, cartId: number) => {
-    const response = await api.post(`/event/${taskId}/carts/${cartId}/checkout`);
-    return response.data;
-};
 
 // Function to fetch all events
 export const fetchEvents = async (): Promise<EventsResponse> => {

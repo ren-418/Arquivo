@@ -8,6 +8,7 @@
   "scripts": {
     "start": "electron-forge start",
     "dev:web": "vite --config vite.renderer.config.mts --host 0.0.0.0",
+    "build": "vite build",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

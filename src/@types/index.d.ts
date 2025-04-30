@@ -1,3 +1,10 @@
+export interface Profile {
+    id: string;
+    name: string;
+    accountCount: number;
+    createdAt: string;
+}
+
 export interface Account {
     email: string;
     password: string;

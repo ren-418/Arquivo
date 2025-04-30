@@ -1,4 +1,3 @@
-// CartedTab.tsx
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,6 +20,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { formatCountdown } from '@/utils/utils';
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -32,6 +32,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger
 } from '@/components/ui/alert-dialog';
+
 import {
     Dialog,
     DialogContent,
@@ -42,23 +43,9 @@ import {
     DialogClose
 } from '@/components/ui/dialog';
 import { useEventDetail } from '@/custom-hooks/use-event-detail';
-import { dropCart, checkoutCart } from '@/rest-api/api';
-import { isEqual } from 'lodash';
+import { dropCartedTicket, checkoutCartedTicket,getCartedTickets } from '@/rest-api/carts-api';
 
-// Types
-interface Account {
-    id: string;
-    email: string;
-    carted?: {
-        section: string;
-        row: string;
-        seats: string[] | string;
-        price: string;
-        deadline: string;
-        map?: string;
-    };
-    // Add other account properties as needed
-}
+
 
 interface CartedTicket {
     email: string;
@@ -89,26 +76,20 @@ interface CartedTicket {
     phone: string;
 }
 
-interface CheckedOutTicket {
-    email: string;
-    // Add other properties as needed
-}
 
 interface CartedTabProps {
     eventId: string;
 }
 
-// Define a type for sortable columns
+
 type SortableColumn = 'email' | 'section' | 'row' | 'seats' | 'price' | 'deadline' | 'carts_remaining' | null;
 
-// Use React.memo to prevent unnecessary re-renders
+
 const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
-    // Fetch accounts and event data from the parent hook
+    
     const { accountsArray: accounts, isLoading: accountsLoading } = useEventDetail(eventId);
 
-    // State management
     const [loading, setLoading] = useState(false);
-    const [checkedOutTickets, setCheckedOutTickets] = useState<CheckedOutTicket[]>([]);
     const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
     const [pageLoaded, setPageLoaded] = useState(false);
     const [selectedTicketForMap, setSelectedTicketForMap] = useState<CartedTicket | null>(null);
@@ -117,69 +98,37 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     const [bulkCheckoutConfirmationOpen, setBulkCheckoutConfirmationOpen] = useState(false);
     const [ticketToDelete, setTicketToDelete] = useState<CartedTicket | null>(null);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    // Track which carts currently have an open browser window
-    // Track which carts currently have an open browser window
+    
+    
     const [openCheckouts, setOpenCheckouts] = useState<Set<string>>(new Set());
-    // Sorting state
+    
     const [sortColumn, setSortColumn] = useState<SortableColumn>(null);
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-    // Use ref to track previous tickets to avoid unnecessary updates
-    const prevCartedTicketsRef = useRef<CartedTicket[]>([]);
+    
 
-    // Extract carted tickets from accounts data with deep comparison to previous tickets
-    const cartedTickets = useMemo(() => {
-        // Set carted tickets from accounts with valid carted info
-        const cartedTicketsList: CartedTicket[] = accounts.reduce((acc: CartedTicket[], account) => {
-            // Check if the account has a carted object with seats data
-            if (account.carted && account.carted.seats) {
-                acc.push({
-                    accountId: account.id,
-                    email: account.email,
-                    row: account.carted.row,
-                    section: account.carted.section,
-                    // Convert the seats array to a comma-separated string
-                    map: account.carted.map,
-                    seats: Array.isArray(account.carted.seats) ? account.carted.seats.join(', ') : account.carted.seats,
-                    price: parseFloat(account.carted.price),
-                    deadline: new Date(account.carted.deadline),
-                    sortc: account.sortc,
-                    sotc: account.sotc,
-                    id_token: account.id_token,
-                    sid: account.sid,
-                    ma_dvt: account.ma_dvt,
-                    checkout_url: account.carted.checkout_url,
-                    bid: account.bid,
-                    proxy: account.proxy,
-                    carts_remaining: account.carted.carts_remaining,
-                    name_on_card: account.first_name + " " + account.last_name,
-                    card_number: account.card_number,
-                    exp_month: account.exp_month,
-                    exp_year: account.exp_year,
-                    cvv: account.cvv,
-                    address_line_1: account.address_line_1,
-                    city: account.city,
-                    postal_code: account.PostalCode,
-                    phone: account.phone,
-                });
-            }
-            return acc;
-        }, []);
+    const [cartedTickets, setCartedTickets] = useState<CartedTicket[]>([]);
 
-        // Only update ref if the tickets have actually changed
-        if (!isEqual(cartedTicketsList, prevCartedTicketsRef.current)) {
-            prevCartedTicketsRef.current = cartedTicketsList;
-        }
+    const fetchCartedTickets = async () => {
+         const response = await getCartedTickets(eventId);
+         
+         const ticketsWithDate = response.map((ticket: any) => ({
+             ...ticket,
+             deadline: new Date(ticket.deadline)
+         }));
+         setCartedTickets(ticketsWithDate);
+    }
 
-        return prevCartedTicketsRef.current;
-    }, [accounts]);
-
-    // Apply sorting to tickets
+    useEffect(() => {
+        fetchCartedTickets();
+    }, [cartedTickets]);
+    
     const sortedTickets = useMemo(() => {
+        
         if (!sortColumn) return cartedTickets;
 
         return [...cartedTickets].sort((a, b) => {
-            // Get values based on column
+            
             let aValue: any, bValue: any;
 
             switch (sortColumn) {
@@ -208,33 +157,31 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     bValue = b.price;
                     break;
                 case 'deadline':
-                    aValue = a.deadline.getTime();
-                    bValue = b.deadline.getTime();
+                    aValue = a.deadline?.getTime();
+                    bValue = b.deadline?.getTime();
                     break;
                 default:
                     return 0;
             }
 
-            // Compare based on direction
             if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
             if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
             return 0;
         });
     }, [cartedTickets, sortColumn, sortDirection]);
 
-    // Handle sorting
     const handleSort = useCallback((column: SortableColumn) => {
-        // If clicking on the same column, toggle direction
+        
         if (sortColumn === column) {
             setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
         } else {
-            // New column, set it and default to ascending
+        
             setSortColumn(column);
             setSortDirection('asc');
         }
     }, [sortColumn]);
 
-    // Get sort icon for column header
+    
     const getSortIcon = useCallback((column: SortableColumn) => {
         if (sortColumn !== column) {
             return <ArrowUpDown size={14} className="ml-1 text-muted-foreground opacity-50" />;
@@ -245,19 +192,19 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             : <ArrowDown size={14} className="ml-1 text-primary" />;
     }, [sortColumn, sortDirection]);
 
-    // Get ticket details for confirmation dialog
+    
     const getTicketDetails = (email: string | null) => {
         if (!email) return null;
         return cartedTickets.find(ticket => ticket.email === email);
     };
 
-    // Set page loaded flag after a small delay for animations
+    
     useEffect(() => {
         const timer = setTimeout(() => setPageLoaded(true), 150);
         return () => clearTimeout(timer);
     }, []);
-    // 1️⃣ Listen for start/end events
-    // 1️⃣ Subscribe to main‑process events
+    
+    
     useEffect(() => {
         const markOpen = (_: any, url: string) => {
             setOpenCheckouts(s => new Set(s).add(url));
@@ -285,12 +232,14 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         // };
     }, []);
 
-    // 2️⃣ On every change to cartedTickets, ask “is–open?”
+    
     useEffect(() => {
+        if (!window.electron) return; // Skip if not in Electron environment
+        
         cartedTickets.forEach(({ checkout_url }) => {
             window.electron.ipcRenderer
                 .invoke('is-checkout-open', checkout_url)
-                .then(open => {
+                .then((open: boolean) => {
                     if (open) {
                         setOpenCheckouts(s => new Set(s).add(checkout_url));
                     }
@@ -300,8 +249,10 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     }, [cartedTickets]);
 
 
-    // 2️⃣ On every change of your tickets list, ask “is this one already open?”
+    
     useEffect(() => {
+        if (!window.electron) return; // Skip if not in Electron environment
+        
         cartedTickets.forEach(ticket => {
             window.electron.ipcRenderer
                 .invoke('is-checkout-open', ticket.checkout_url)
@@ -318,9 +269,9 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         });
     }, [cartedTickets]);
 
-    // inside CartedTab, after your IPC subscription useEffect…
-
     useEffect(() => {
+        if (!window.electron) return; // Skip if not in Electron environment
+        
         if (cartedTickets.length === 0) return;
 
         const interval = setInterval(() => {
@@ -343,8 +294,14 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     }, [cartedTickets]);
 
 
-    // ===== Action Handlers =====
+    
     const handleManualCheckout = useCallback((ticket: CartedTicket) => {
+        if (!window.electron) {
+            // Fallback behavior for non-Electron environment
+            window.open(ticket.checkout_url, '_blank');
+            return;
+        }
+
         // 1) Optimistically mark it open
         setOpenCheckouts(s => {
             const next = new Set(s);
@@ -388,15 +345,17 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             }
 
             // Get the account id from the ticket
-            const accountId = ticket.accountId;
+            //const accountId = ticket.accountId;
+
+            console.log('ticket', ticket);
 
             // Find the account index based on account id
-            const accountIndex = accounts.findIndex(account => account.id === accountId);
-            if (accountIndex === -1) {
-                throw new Error("Account not found");
-            }
+            // const accountIndex = accounts.findIndex(account => account.id === accountId);
+            // if (accountIndex === -1) {
+            //     throw new Error("Account not found");
+            // }
 
-            await checkoutCart(eventId, accountIndex);
+            await checkoutCartedTicket(eventId, ticket.id);
             // toast.success("Ticket checked out successfully");
 
             // No need to update cartedTickets state as it's derived from accounts
@@ -421,15 +380,9 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             }
 
             // Get the account id from the ticket
-            const accountId = ticket.accountId;
+           
 
-            // Find the account index based on account id
-            const accountIndex = accounts.findIndex(account => account.id === accountId);
-            if (accountIndex === -1) {
-                throw new Error("Account not found");
-            }
-
-            await dropCart(eventId, accountIndex);
+            await dropCartedTicket(eventId, ticket.id);
             // toast.success("Ticket dropped successfully");
 
             // No need to update cartedTickets state as it's derived from accounts
@@ -512,7 +465,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         }
     };
 
-    // ===== UI Interaction Handlers =====
+    
 
     const handleSelectAll = useCallback(() => {
         if (selectedTickets.length === cartedTickets.length) {
@@ -556,9 +509,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         setSelectedTicketForMap(ticket);
     }, []);
 
-    // ===== Helper Functions =====
-
-    // Helper to calculate countdown classes based on time remaining
     const getCountdownClass = useCallback((deadline: Date) => {
         const now = new Date();
         const diffMs = deadline.getTime() - now.getTime();
@@ -573,13 +523,13 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         }
     }, []);
 
-    // Open dialog to confirm ticket drop
+   
     const openDeleteDialog = useCallback((ticket: CartedTicket) => {
         setTicketToDelete(ticket);
         setDeleteDialogOpen(true);
     }, []);
 
-    // Handle confirmed ticket deletion
+   
     const confirmDeleteTicket = useCallback(async () => {
         if (!ticketToDelete) return;
 
@@ -588,9 +538,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         setTicketToDelete(null);
     }, [ticketToDelete, handleDropTicket]);
 
-    // ===== Sub-Components =====
-
-    // Empty cart placeholder
+   
     const EmptyCartPlaceholder = React.memo(() => (
         <TableRow>
             <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
@@ -608,8 +556,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             </TableCell>
         </TableRow>
     ));
-
-    // Ticket row component
     const TicketRow = React.memo(({ ticket, index }: { ticket: CartedTicket, index: number }) => (
         <TableRow
             key={ticket.email}
@@ -647,7 +593,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                 <span className="font-medium text-green-500">${ticket.price.toFixed(2)}</span>
             </TableCell>
             <TableCell>
-                <span className="font-medium text-green-500">${(ticket.price * ticket.seats.split(" ").length).toFixed(2)}</span>
+                {/* <span className="font-medium text-green-500">${(ticket.price * ticket.seats.split(" ").length).toFixed(2)}</span> */}
             </TableCell>
             <TableCell>
                 <span className="font-medium">{ticket.carts_remaining}</span>
@@ -672,7 +618,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     {openCheckouts.has(ticket.checkout_url) ? (
                         <Badge className="bg-blue-500/10 text-blue-500 border border-blue-500/20 flex items-center">
                             <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                            Checkout Open
+                            Checkout Open
                         </Badge>
                     ) : (
                         <Button
@@ -685,8 +631,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                             <ExternalLink size={14} />
                         </Button>
                     )}
-
-
                     <Button
                         variant="outline"
                         size="sm"
@@ -701,7 +645,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         </TableRow>
     ));
 
-    // Create a sortable table header component
     const SortableTableHead = React.memo(({
         column,
         children,
@@ -735,7 +678,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     </h2>
                 </div>
             </div>
-
             <Card>
                 <CardHeader className="pb-3 flex flex-row justify-between items-center">
                     <CardTitle className="text-lg flex items-center">
@@ -754,7 +696,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                                     Select All ({selectedTickets.length}/{cartedTickets.length})
                                 </label>
                             </div>
-
                             <div className="flex space-x-2">
                                 <Button
                                     size="sm"
@@ -836,13 +777,11 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                                         />
                                     ))
                                 )}
-                            </TableBody>
+                            </TableBody> 
                         </Table>
                     </div>
                 </CardContent>
             </Card>
-
-            {/* Seat Map Dialog */}
             <Dialog open={selectedTicketForMap !== null} onOpenChange={(open) => !open && setSelectedTicketForMap(null)}>
                 <DialogContent className="max-w-3xl">
                     <DialogHeader>
@@ -854,7 +793,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                             {selectedTicketForMap?.seats} - ${selectedTicketForMap?.price.toFixed(2)}
                         </DialogDescription>
                     </DialogHeader>
-
                     <div className="relative aspect-video rounded-md border">
                         <img
                             src={selectedTicketForMap?.map || '/api/placeholder/600/300'}
@@ -874,7 +812,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                             </div>
                         </div>
                     </div>
-
                     <DialogFooter>
                         <Button
                             onClick={() => {
@@ -896,8 +833,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-            {/* Single Ticket Checkout Confirmation Dialog */}
             <Dialog
                 open={checkoutConfirmationOpen}
                 onOpenChange={(open) => {
@@ -982,8 +917,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-            {/* Bulk Ticket Checkout Confirmation Dialog */}
             <Dialog
                 open={bulkCheckoutConfirmationOpen}
                 onOpenChange={setBulkCheckoutConfirmationOpen}
@@ -1082,8 +1015,6 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-
-            {/* Ticket Delete Confirmation Dialog */}
             <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>

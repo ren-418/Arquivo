@@ -50,7 +50,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from 'sonner';
+
 import { Switch } from '../ui/switch';
 
 interface EventPresaleCodesTabProps {

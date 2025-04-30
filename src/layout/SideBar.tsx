@@ -52,8 +52,8 @@ const Sidebar: React.FC = () => {
             icon: <LayoutDashboard className="h-5 w-5" />,
         },
         {
-            href: '/accounts',
-            title: 'Accounts',
+            href: '/profiles',
+            title: 'Profiles',
             icon: <Users className="h-5 w-5" />,
         },
         {

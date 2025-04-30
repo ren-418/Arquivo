@@ -3,7 +3,7 @@ import { RootRoute } from "./__root";
 import HomePage from "../pages/HomePage";
 import SecondPage from "@/pages/SecondPage";
 import Dashboard from "@/pages/Dashboard";
-import Accounts from "@/pages/Accounts";
+import Profiles from "@/pages/Profiles";
 import SavedPresaleCodes from "@/pages/SavedPresaleCodes";
 import EventDetail from "@/pages/EventDetail";
 import HistoryPage from "@/pages/History";
@@ -27,10 +27,10 @@ export const DashboardRoute = createRoute({
   component: Dashboard,
 });
 
-export const AccountsRoute = createRoute({
+export const ProfilesRoute = createRoute({
   getParentRoute: () => RootRoute,
-  path: "/accounts",
-  component: Accounts,
+  path: "/profiles",
+  component: Profiles,
 });
 
 export const PresalesRoute = createRoute({
@@ -62,7 +62,7 @@ export const rootTree = RootRoute.addChildren([
   HomeRoute,
   SecondPageRoute,
   DashboardRoute,
-  AccountsRoute,
+  ProfilesRoute,
   PresalesRoute,
   EventRoute,
   HistoryRoute,

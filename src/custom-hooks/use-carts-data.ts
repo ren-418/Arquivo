@@ -1,7 +1,7 @@
 // hooks/use-carts-data.ts
 import { useState, useEffect, useCallback } from 'react';
 import { CartItem } from '@/@types/history';
-import { toast } from 'sonner';
+
 import { HistoryService, handleApiError, withRetry } from '@/rest-api/api';
 
 export function useCartsData(eventId: string) {

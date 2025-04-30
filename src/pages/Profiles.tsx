@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
-import AccountsTable from '@/components/accounts/AccountsTable';
-import AddAccountsButton from '@/components/accounts/AddAccountsButton';
-import { useAccounts } from '@/custom-hooks/use-accounts';
+import ProfilesTable from '@/components/profiles/ProfilesTable';
+import AddProfilesButton from '@/components/profiles/AddProfilesButton';
+import { useProfiles } from '@/custom-hooks/use-profiles';
 import { motion } from 'framer-motion';
 import PageTitle from '@/components/PageTitle';
 
-const Accounts: React.FC = () => {
+const Profiles: React.FC = () => {
 
     const {
-        accounts,
+        profiles,
         isLoading,
         error,
-        addAccounts: handleAddAccounts,
-        deleteAccount: handleDeleteAccount,
-    } = useAccounts();
+        addProfiles: handleAddProfiles,
+        deleteProfile: handleDeleteProfile,
+    } = useProfiles();
 
     useEffect(() => {
         const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -26,9 +26,9 @@ const Accounts: React.FC = () => {
     return (
         <div>
             <PageTitle
-                title="Accounts"
-                description="Manage your ticketing accounts"
-                rightContent={<AddAccountsButton onAddAccounts={handleAddAccounts} />}
+                title="Profiles"
+                description="Manage your ticketing profiles"
+                rightContent={<AddProfilesButton onAddProfiles={handleAddProfiles} />}
             />
             {
                 error ? (
@@ -46,14 +46,14 @@ const Accounts: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
             >
-                <AccountsTable
-                    data={accounts}
+                <ProfilesTable
+                    data={profiles}
                     isLoading={isLoading}
-                    onDelete={handleDeleteAccount}
+                    onDelete={handleDeleteProfile}
                 />
             </motion.div>
         </div>
     );
 };
 
-export default Accounts;
+export default Profiles;

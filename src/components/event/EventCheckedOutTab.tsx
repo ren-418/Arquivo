@@ -1,19 +1,18 @@
 // CheckedOutTab.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 import {
     CheckSquare,
     Loader2,
     AlertCircle,
     Map,
     Download,
-    ExternalLink,
     Search
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
 import {
     Dialog,
     DialogContent,
@@ -26,7 +25,7 @@ import {
 import { useEventDetail } from '@/custom-hooks/use-event-detail';
 import { Input } from '@/components/ui/input';
 import TruncatedTextCell from '../TruncatedTextCell';
-
+import { getCheckedOutTickets } from '@/rest-api/checkout-api';
 
 interface CheckedOutTicket {
     email: string;
@@ -45,95 +44,83 @@ interface CheckedOutTabProps {
 }
 
 const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
-    // Fetch accounts and event data from the parent hook
     const { accountsArray: accounts, eventInfo } = useEventDetail(eventId);
 
     // State management
     const [loading, setLoading] = useState(true);
     const [checkedOutTickets, setCheckedOutTickets] = useState<CheckedOutTicket[]>([]);
-    const [pageLoaded, setPageLoaded] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTicketForMap, setSelectedTicketForMap] = useState<CheckedOutTicket | null>(null);
 
-    // Process account data to extract checked out tickets
+
+    const processCheckedOutTickets = async () => {
+        setLoading(true);
+        try {
+            if (accounts.length === 0) {
+                setLoading(false);
+                return;
+            }
+
+            const tickets: CheckedOutTicket[] = await getCheckedOutTickets(eventId);
+            setCheckedOutTickets(tickets);
+            setLoading(false);
+        } catch (error) {
+            console.error('Failed to process checked out tickets:', error);
+            // toast.error("Failed to load checked out tickets");
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        // Skip processing if accounts aren't loaded yet
         if (!accounts) {
             return;
         }
-
-        const processCheckedOutTickets = () => {
-            try {
-                if (accounts.length === 0) {
-                    setLoading(false);
-                    return;
-                }
-
-                const tickets: CheckedOutTicket[] = accounts
-                    .filter(account => account.checked_out && account.checked_out.order_id)
-                    .map(account => {
-                        // Get the seat string from seats array
-                        const seatString = account.checked_out.seats
-                            ? account.checked_out.seats.join(', ')
-                            : 'N/A';
-
-                        // Convert price string to number
-                        const priceNumber = parseFloat(account.checked_out.price.replace(/[^0-9.]/g, ''));
-
-                        return {
-                            email: account.email,
-                            section: account.checked_out.section,
-                            row: account.checked_out.row,
-                            seats: seatString,
-                            price: isNaN(priceNumber) ? 0 : priceNumber,
-                            purchaseDate: new Date(), // We don't have the actual purchase date in the data
-                            map: account.checked_out.map,
-                            orderId: account.checked_out.order_id,
-                            message: account.checked_out.message
-                        };
-                    });
-
-                setCheckedOutTickets(tickets);
-                setLoading(false);
-            } catch (error) {
-                console.error('Failed to process checked out tickets:', error);
-                // toast.error("Failed to load checked out tickets");
-                setLoading(false);
-            }
-        };
-
         processCheckedOutTickets();
-    }, [accounts]);
+    }, [accounts, eventId]);
 
-    // Set page loaded flag only once after mounting
-    useEffect(() => {
-        const timer = setTimeout(() => setPageLoaded(true), 150);
-        return () => clearTimeout(timer);
-    }, []);
+    const filteredTickets = useMemo(() => {
+        // Create a Set of unique ticket keys
+        const seen = new Set<string>();
 
-    // Filter tickets based on search term
-    const filteredTickets = checkedOutTickets.filter(ticket =>
-        ticket.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ticket.section.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ticket.row.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ticket.seats.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        ticket.orderId.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+        return checkedOutTickets
+            .filter(ticket => {
+                const key = `${ticket.email}-${ticket.orderId}`;
+                if (seen.has(key)) {
+                    return false;
+                }
+                seen.add(key);
+                return true;
+            })
+            .filter(ticket =>
+                ticket.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                ticket.section.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                ticket.row.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                ticket.seats.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                ticket.orderId.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+    }, [checkedOutTickets, searchTerm]);
 
     // Format purchase date
-    const formatPurchaseDate = (date: Date) => {
-        return date.toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
+    // const formatPurchaseDate = (date: Date) => {
+    //     return date.toLocaleString('en-US', {
+    //         month: 'short',
+    //         day: 'numeric',
+    //         hour: '2-digit',
+    //         minute: '2-digit'
+    //     });
+    // };
 
     // Handle ticket download
     const handleDownloadTicket = (ticket: CheckedOutTicket) => {
         // toast.success(`Ticket for ${ticket.email} downloaded`);
         // Implement actual download functionality
+        console.log(ticket);
+        // download ticket
+        const downloadUrl = ticket.map;
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `${ticket.orderId}.png`;
+        link.click();
     };
 
     // Open seat map
@@ -161,7 +148,7 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
     );
 
     return (
-        <div className={`space-y-6 ${pageLoaded ? 'animate-fadeIn' : 'opacity-0'}`}>
+        <div className="space-y-6">
             <div className="flex justify-between items-center mb-3">
                 <div className="flex items-center">
                     <h2 className="text-xl font-bold flex items-center">
@@ -212,7 +199,7 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                                     filteredTickets.map((ticket, index) => (
                                         <TableRow
                                             key={`${ticket.email}-${ticket.orderId}`}
-                                            className={`hover:bg-accent/10 transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/10'} ${pageLoaded ? `animate-fadeIn delay-${Math.min((index % 10) * 50, 500)}` : ''}`}
+                                            className={`hover:bg-accent/10 transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/10'}`}
                                         >
                                             <TableCell className="font-medium">
                                                 {ticket.email.split('@')[0]}
@@ -281,7 +268,6 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                             {selectedTicketForMap?.seats} - Order ID: {selectedTicketForMap?.orderId}
                         </DialogDescription>
                     </DialogHeader>
-
                     <div className="relative aspect-video rounded-md border">
                         {selectedTicketForMap?.map ? (
                             <img
@@ -313,7 +299,6 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                             </div>
                         </div>
                     </div>
-
                     <DialogFooter>
                         <Button
                             onClick={() => handleDownloadTicket(selectedTicketForMap!)}

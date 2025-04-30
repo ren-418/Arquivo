@@ -69,7 +69,7 @@ import { MultiSelect } from '@/components/ui/multi-select';
 import { NumericInput } from '@/components/ui/numeric-input';
 import { loadVenueMap } from '@/utils/venue-map-utils';
 import { getFilters, addFilter as apiAddFilter, removeFilter as apiRemoveFilter, dropNonMatchingCarts, updateFilterOrder, updateFilter as apiUpdateFilter } from '@/rest-api/filters-api'; // Added updateFilterOrder
-import { toast } from 'sonner';
+
 
 interface EventFiltersTabProps {
     eventId: string;
@@ -639,7 +639,6 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                                                     </ul>
                                                 </div>
                                                 <div className="rounded-md border">
-
                                                     <TransformWrapper
                                                         initialScale={1}
                                                         initialPositionX={0}
@@ -671,7 +670,6 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                                                     </TransformWrapper>
                                                 </div>
 
-                                                {/* Selected sections from the map */}
                                                 {selectedMapSections.length > 0 && (
                                                     <div className="mt-4">
                                                         <h3 className="text-sm font-medium mb-2">Selected Sections</h3>
@@ -727,7 +725,7 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                                                         onClick={updateFilter}
 
                                                     >
-                                                        <Plus className="h-4 w-4 mr-2" />
+                                                        
                                                         Update Filter
                                                     </Button>
                                                 )}
@@ -752,11 +750,7 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
                                                     </Button>
                                                 )}
                                             </>
-
                                         )}
-
-
-
                                     </DialogFooter>
                                 </DialogContent>
                             </Dialog>

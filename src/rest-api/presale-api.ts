@@ -3,7 +3,7 @@ import { PresaleCodeSet, PresaleCodeSetDetail, AddPresaleCodeSetPayload, UpdateP
 
 // Create an axios instance with default configuration
 const api = axios.create({
-    baseURL: 'http://172.233.123.242:8080/api',
+    baseURL: import.meta.env.VITE_BACKEND_API,
     headers: {
         'Content-Type': 'application/json',
     },
