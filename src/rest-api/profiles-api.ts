@@ -20,6 +20,17 @@ export const fetchProfiles = async (): Promise<Profile[]> => {
     }
 };
 
+// Function to fetch profile details
+export const fetchProfileDetails = async (id: string): Promise<any> => {
+    try {
+        const response = await api.get(`/profiles/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching profile details:', error);
+        throw error;
+    }
+};
+
 // Function to add new accounts
 export const addProfiles = async (profiles: string): Promise<any> => {
     try {
@@ -40,6 +51,31 @@ export const deleteProfile = async (id: string): Promise<any> => {
         return response.data;
     } catch (error) {
         console.error('Error deleting profile:', error);
+        throw error;
+    }
+};
+
+
+// add account to profile
+export const addAccountToProfile = async (profileId: string, account: string): Promise<any> => {
+    try {
+
+        
+        const response = await api.post(`/profiles/${profileId}/accounts`, { account });
+        return response.data;
+    } catch (error) {
+        console.error('Error adding account to profile:', error);
+        throw error;
+    }
+};
+
+// Function to delete an account from a profile
+export const deleteAccountFromProfile = async (profileId: string, email: string): Promise<any> => {
+    try {
+        const response = await api.delete(`/profiles/${profileId}/accounts/${email}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting account from profile:', error);
         throw error;
     }
 };

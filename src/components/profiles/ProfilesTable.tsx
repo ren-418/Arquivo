@@ -137,10 +137,6 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const formatCardNumber = (number: string) => {
-        return `${number.slice(0, 4)}...${number.slice(-4)}`;
-    };
-
     const initData = async () => {
         const profilesData = await fetchProfiles();
         // setInitialData(profilesData);
@@ -167,37 +163,40 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
             )}
         </Button>
     );
-    const handleManualCheckout = useCallback((account: Account) => {
-        try {
-            // Call the function in Electron's main process through IPC
-            window.electron.checkoutManually({
-                sortc: account.sortc,
-                sotc: account.sotc,
-                id_token: account.id_token,
-                sid: account.sid,
-                ma_dvt: account.ma_dvt,
-                checkout_url: "https://www.ticketmaster.com/",
-                bid: account.bid,
-                proxy: account.proxy,
-                name_on_card: account.first_name + " " + account.last_name,
-                card_number: account.card_number,
-                exp_month: account.exp_month,
-                exp_year: account.exp_year,
-                cvv: account.cvv,
-                address_line_1: account.address_line_1,
-                city: account.city,
-                postal_code: account.PostalCode,
-                phone: account.phone,
-            });
 
-            // toast.success("Starting Browser");
-        } catch (error) {
-            console.error('Failed to start browser:', error);
-            // toast.error("Failed to start browser");
-        }
-    }, []);
+    // const handleManualCheckout = useCallback((account: Account) => {
+
+    //     try {
+    //         // Call the function in Electron's main process through IPC
+    //         window.electron.checkoutManually({
+    //             sortc: account.sortc,
+    //             sotc: account.sotc,
+    //             id_token: account.id_token,
+    //             sid: account.sid,
+    //             ma_dvt: account.ma_dvt,
+    //             checkout_url: "https://www.ticketmaster.com/",
+    //             bid: account.bid,
+    //             proxy: account.proxy,
+    //             name_on_card: account.first_name + " " + account.last_name,
+    //             card_number: account.card_number,
+    //             exp_month: account.exp_month,
+    //             exp_year: account.exp_year,
+    //             cvv: account.cvv,
+    //             address_line_1: account.address_line_1,
+    //             city: account.city,
+    //             postal_code: account.PostalCode,
+    //             phone: account.phone,
+    //         });
+
+    //         // toast.success("Starting Browser");
+    //     } catch (error) {
+    //         console.error('Failed to start browser:', error);
+            
+    //     }
+    // }, []);
+    
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 cursor-pointer">
             <div className="flex items-center justify-between mb-4">
                 <div className="relative flex-1 max-w-sm">
                     <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -249,16 +248,16 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
                             Array.from({ length: 5 }).map((_, index) => (
                                 <TableRow key={`skeleton-${index}`}>
                                     <TableCell>
-                                        <div className="h-6 w-48 rounded-md bg-muted animate-pulse"></div>
+                                        <div className="h-4 w-32 bg-muted animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell>
-                                        <div className="h-6 w-24 rounded-md bg-muted animate-pulse"></div>
+                                        <div className="h-4 w-16 bg-muted animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell>
-                                        <div className="h-6 w-32 rounded-md bg-muted animate-pulse"></div>
+                                        <div className="h-4 w-24 bg-muted animate-pulse rounded" />
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        <div className="h-6 w-20 rounded-md bg-muted animate-pulse ml-auto"></div>
+                                        <div className="h-4 w-8 bg-muted animate-pulse rounded" />
                                     </TableCell>
                                 </TableRow>
                             ))
@@ -266,7 +265,7 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
                             <TableRow>
                                 <TableCell colSpan={4} className="text-center py-8">
                                     <div className="flex flex-col items-center justify-center space-y-2">
-                                        <Users className="h-8 w-8 text-muted-foreground" />
+                                        <Mail className="h-8 w-8 text-muted-foreground" />
                                         <p className="text-muted-foreground">No profiles found</p>
                                         {searchTerm && (
                                             <p className="text-xs text-muted-foreground">Try adjusting your search term</p>
@@ -276,19 +275,25 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
                             </TableRow>
                         ) : (
                             currentData.map((profile) => (
-                                <TableRow 
-                                    key={profile.id}
-                                    className="cursor-pointer hover:bg-muted/50"
-                                    onClick={() => onProfileClick?.(profile.id)}
-                                >
-                                    <TableCell>{profile.name}</TableCell>
+                                <TableRow key={profile.id} onClick={() => onProfileClick?.(profile.id)}>
+                                    <TableCell>
+                                        <Button
+                                            variant="link"
+                                            className="p-0 h-auto font-normal"
+                                            onClick={() => onProfileClick?.(profile.id)}
+                                        >
+                                            {profile.name}
+                                        </Button>
+                                    </TableCell>
                                     <TableCell>{profile.accountCount}</TableCell>
-                                    <TableCell>{new Date(profile.createdAt).toLocaleDateString()}</TableCell>
+                                    <TableCell>
+                                        {new Date(profile.createdAt).toLocaleDateString()}
+                                    </TableCell>
                                     <TableCell className="text-right">
                                         <AlertDialog>
                                             <DropdownMenu>
-                                                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon">
                                                         <MoreHorizontal className="h-4 w-4" />
                                                     </Button>
                                                 </DropdownMenuTrigger>
@@ -314,10 +319,7 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
                                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                                                     <AlertDialogAction
                                                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            onDelete(profile.id);
-                                                        }}
+                                                        onClick={() => onDelete(profile.id)}
                                                     >
                                                         Delete
                                                     </AlertDialogAction>

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';  
 import ProfilesTable from '@/components/profiles/ProfilesTable';
 import AddProfilesButton from '@/components/profiles/AddProfilesButton';
 import { useProfiles } from '@/custom-hooks/use-profiles';
@@ -6,7 +7,7 @@ import { motion } from 'framer-motion';
 import PageTitle from '@/components/PageTitle';
 
 const Profiles: React.FC = () => {
-
+    const navigate = useNavigate();
     const {
         profiles,
         isLoading,
@@ -22,6 +23,10 @@ const Profiles: React.FC = () => {
             document.body.style.overflow = originalStyle;
         };
     }, []);
+
+    const handleProfileClick = (id: string) => {
+        navigate({ to: '/profiles/$profileId', params: { profileId: id } });  
+    };
 
     return (
         <div>
@@ -50,6 +55,7 @@ const Profiles: React.FC = () => {
                     data={profiles}
                     isLoading={isLoading}
                     onDelete={handleDeleteProfile}
+                    onProfileClick={handleProfileClick}
                 />
             </motion.div>
         </div>

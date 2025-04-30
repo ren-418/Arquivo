@@ -8,6 +8,7 @@ import SavedPresaleCodes from "@/pages/SavedPresaleCodes";
 import EventDetail from "@/pages/EventDetail";
 import HistoryPage from "@/pages/History";
 import HistoryDetailPage from "@/pages/HistoryDetailPage";
+import ProfileDetails from "@/pages/ProfileDetails";
 
 export const HomeRoute = createRoute({
   getParentRoute: () => RootRoute,
@@ -58,6 +59,12 @@ export const HistoryDetailRoute = createRoute({
   component: HistoryDetailPage,
 });
 
+export const ProfileDetailsRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/profiles/$profileId",
+  component: ProfileDetails,
+});
+
 export const rootTree = RootRoute.addChildren([
   HomeRoute,
   SecondPageRoute,
@@ -66,5 +73,6 @@ export const rootTree = RootRoute.addChildren([
   PresalesRoute,
   EventRoute,
   HistoryRoute,
-  HistoryDetailRoute
+  HistoryDetailRoute,
+  ProfileDetailsRoute
 ]);
