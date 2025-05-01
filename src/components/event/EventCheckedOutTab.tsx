@@ -12,6 +12,7 @@ import {
     Download,
     Search
 } from 'lucide-react';
+
 import { Badge } from '@/components/ui/badge';
 import {
     Dialog,
@@ -81,7 +82,7 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
     const filteredTickets = useMemo(() => {
         // Create a Set of unique ticket keys
         const seen = new Set<string>();
-
+        console.log('checkedOutTickets', checkedOutTickets);
         return checkedOutTickets
             .filter(ticket => {
                 const key = `${ticket.email}-${ticket.orderId}`;
@@ -91,13 +92,20 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                 seen.add(key);
                 return true;
             })
-            .filter(ticket =>
-                ticket.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                ticket.section.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                ticket.row.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                ticket.seats.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                ticket.orderId.toLowerCase().includes(searchTerm.toLowerCase())
-            );
+            .filter(ticket => {
+                const searchLower = searchTerm.toLowerCase();
+                const seatsString = Array.isArray(ticket.seats) 
+                    ? ticket.seats.join(', ') 
+                    : String(ticket.seats || '');
+                
+                return (
+                    ticket.email?.toLowerCase().includes(searchLower) ||
+                    ticket.section?.toLowerCase().includes(searchLower) ||
+                    ticket.row?.toLowerCase().includes(searchLower) ||
+                    seatsString.toLowerCase().includes(searchLower) ||
+                    ticket.orderId?.toLowerCase().includes(searchLower)
+                );
+            });
     }, [checkedOutTickets, searchTerm]);
 
     // Format purchase date

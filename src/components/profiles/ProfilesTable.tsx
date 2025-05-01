@@ -275,18 +275,17 @@ const ProfilesTable: React.FC<ProfilesTableProps> = ({ data, isLoading, onDelete
                             </TableRow>
                         ) : (
                             currentData.map((profile) => (
-                                <TableRow key={profile.id} onClick={() => onProfileClick?.(profile.id)}>
-                                    <TableCell>
+                                <TableRow key={profile.id} >
+                                    <TableCell onClick={() => onProfileClick?.(profile.id)}>
                                         <Button
                                             variant="link"
                                             className="p-0 h-auto font-normal"
-                                            onClick={() => onProfileClick?.(profile.id)}
                                         >
                                             {profile.name}
                                         </Button>
                                     </TableCell>
-                                    <TableCell>{profile.accountCount}</TableCell>
-                                    <TableCell>
+                                    <TableCell onClick={() => onProfileClick?.(profile.id)}>{profile.accountCount}</TableCell>
+                                    <TableCell onClick={() => onProfileClick?.(profile.id)}>
                                         {new Date(profile.createdAt).toLocaleDateString()}
                                     </TableCell>
                                     <TableCell className="text-right">

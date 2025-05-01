@@ -103,39 +103,19 @@ const ProfileDetails: React.FC = () => {
         }
     };
 
-    const handleAddAccount = async (account: AccountFormData) => {
+    const handleAddAccount = async (accounts: string[]) => {
         if (!profileId) return;
         try {
-            // Format the account data into the required string format
-            const accountString = [
-                account.email,
-                'password', // You might want to add a password field to the form
-                account.ma_dvt,
-                account.sortc,
-                account.sotc,
-                account.id_token,
-                account.sid,
-                account.first_name,
-                account.last_name,
-                account.address_line_1,
-                account.city,
-                account.PostalCode,
-                account.phone,
-                account.proxy,
-                account.card_number,
-                account.exp_month,
-                account.exp_year,
-                account.cvv
-            ].join(';');
-
+            // The accounts array already contains the properly formatted strings
             const response = await api.post(`/profiles/${profileId}/accounts`, {
-                accounts: [accountString]
+                accounts
             });
 
-            toast.success("Account added successfully");
+            toast.success(`Successfully added ${accounts.length} account(s)`);
             loadProfileDetails();
         } catch (error) {
-            toast.error("Failed to add account. Please try again.");
+            console.error('Failed to add accounts:', error);
+            toast.error("Failed to add accounts. Please try again.");
         }
     };
 
