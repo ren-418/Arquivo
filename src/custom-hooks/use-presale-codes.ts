@@ -13,8 +13,8 @@ export function usePresaleCodes() {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetchPresaleCodeSets();
-            setPresaleCodeSets(response.presales);
+            const res = await fetchPresaleCodeSets();
+            setPresaleCodeSets(res);
         } catch (err) {
             setError('Failed to load presale code sets. Please try again later.');
             // toast.error("Failed to load presale code sets. Please try again later.");

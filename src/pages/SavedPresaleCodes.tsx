@@ -7,6 +7,7 @@ import PresaleSetDetailModal from '@/components/presale/PresaleSetDetailModal';
 import PageTitle from '@/components/PageTitle';
 
 const SavedPresaleCodes: React.FC = () => {
+
     const {
         presaleCodeSets,
         isLoading,
@@ -37,7 +38,6 @@ const SavedPresaleCodes: React.FC = () => {
                 description="Manage your presale codes for quick access"
                 rightContent={<AddPresaleSetButton onAddPresaleSet={handleAddPresaleSet} />}
             />
-
             {error ? (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}

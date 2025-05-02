@@ -12,8 +12,8 @@ const api = axios.create({
 // Function to fetch all presale code sets
 export const fetchPresaleCodeSets = async (): Promise<{ presales: PresaleCodeSet[] }> => {
     try {
-        const response = await api.get('/presale_codes');
-        return response.data.presales_codes;
+        const response = await api.get('/presales');
+        return response.data.presales;
     } catch (error) {
         console.error('Error fetching presale code sets:', error);
         throw error;
@@ -39,7 +39,7 @@ export const addPresaleCodeSet = async (data: AddPresaleCodeSetPayload): Promise
     } catch (error) {
         console.error('Error adding presale code set:', error);
         throw error;
-    }
+    }   
 };
 
 // Function to update an existing presale code set
