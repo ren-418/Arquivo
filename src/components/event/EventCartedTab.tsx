@@ -186,13 +186,11 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
         if (sortColumn !== column) {
             return <ArrowUpDown size={14} className="ml-1 text-muted-foreground opacity-50" />;
         }
-
         return sortDirection === 'asc'
             ? <ArrowUp size={14} className="ml-1 text-primary" />
             : <ArrowDown size={14} className="ml-1 text-primary" />;
     }, [sortColumn, sortDirection]);
 
-    
     const getTicketDetails = (email: string | null) => {
         if (!email) return null;
         return cartedTickets.find(ticket => ticket.email === email);

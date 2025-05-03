@@ -49,7 +49,7 @@ const ThemeToggle: React.FC = () => {
                 <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className={"flex items-center space-x-3 px-4 py-3 rounded-md transition-all duration-200 mb-1"}
+                    className={"flex items-center space-x-3 px-4 py-3 rounded-md transition-all duration-200 mb-1 cursor-pointer"}
                 >
                     {currentIcon()}
                     <span className="font-medium">Toggle theme</span>
@@ -62,7 +62,7 @@ const ThemeToggle: React.FC = () => {
                         onClick={() => setThemeMode(option.value)}
                         className={theme === option.value ? "bg-secondary" : ""}
                     >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 cursor-pointer">
                             {option.icon}
                             <span>{option.label}</span>
                             {theme === option.value && (

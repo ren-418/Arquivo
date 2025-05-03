@@ -267,13 +267,19 @@ const PresaleSetDetailModal: React.FC<PresaleSetDetailModalProps> = ({
 
                                     <div className="space-y-2">
                                         <Label htmlFor="presale-codes">Presale Codes (one per line)</Label>
-                                        <Textarea
+                                        <textarea
                                             id="presale-codes"
                                             placeholder="Enter codes here, one per line..."
-                                            className="h-64 font-mono text-sm"
                                             value={codesText}
                                             onChange={(e) => setCodesText(e.target.value)}
                                             disabled={isSubmitting}
+                                            className="flex min-h-[200px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+                                            style={{
+                                                resize: 'none',
+                                                overflowX: 'auto',
+                                                whiteSpace: 'pre',
+                                                wordWrap: 'normal'
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -283,7 +289,7 @@ const PresaleSetDetailModal: React.FC<PresaleSetDetailModalProps> = ({
                                         <h4 className="font-medium">Presale Codes</h4>
                                     </div>
                                     <div className="p-3 max-h-[300px] overflow-y-auto">
-                                        <div className="font-mono text-sm space-y-1">
+                                        <div className="font-mono text-sm space-y-1 whitespace-pre overflow-x-auto">
                                             {presaleDetail.codes.map((code, index) => (
                                                 <div key={index} className="flex justify-between items-center p-1 hover:bg-muted rounded">
                                                     <span>{code}</span>

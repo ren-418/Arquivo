@@ -3,6 +3,7 @@ import registerListeners from "./helpers/ipc/listeners-register";
 // "electron-squirrel-startup" seems broken when packaging with vite
 //import started from "electron-squirrel-startup";
 import path from "path";
+
 import {
   installExtension,
   REACT_DEVELOPER_TOOLS,
@@ -11,14 +12,20 @@ import {
 const inDevelopment = process.env.NODE_ENV === "development";
 
 function createWindow() {
-  const preload = path.join(__dirname, "preload.js");
+  const preload = inDevelopment
+    ? path.join(__dirname, "../src/preload.js")
+    : path.join(__dirname, "preload.js");
+  
+  console.log('Preload script path:', preload);
+  console.log('Development mode:', inDevelopment);
+  
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       devTools: inDevelopment,
       contextIsolation: true,
-      nodeIntegration: true,
+      nodeIntegration: false,
       nodeIntegrationInSubFrames: false,
       preload: preload,
     },

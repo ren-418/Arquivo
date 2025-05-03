@@ -8,47 +8,74 @@ export interface ThemePreferences {
 }
 
 export async function getCurrentTheme(): Promise<ThemePreferences> {
-    const currentTheme = await window.themeMode.current();
-    const localTheme = localStorage.getItem(THEME_KEY) as ThemeMode | null;
-    return {
-        system: currentTheme,
-        local: localTheme,
-    };
+    try {
+        const currentTheme = await window.themeMode?.current() || 'system';
+        const localTheme = localStorage.getItem(THEME_KEY) as ThemeMode | null;
+        return {
+            system: currentTheme,
+            local: localTheme,
+        };
+    } catch (error) {
+        console.error('Error getting current theme:', error);
+        return {
+            system: 'system',
+            local: localStorage.getItem(THEME_KEY) as ThemeMode | null,
+        };
+    }
 }
 
 export async function setTheme(newTheme: ThemeMode) {
-    switch (newTheme) {
-        case "dark":
-            await window.themeMode.dark();
-            updateDocumentTheme(true);
-            break;
-        case "light":
-            await window.themeMode.light();
-            updateDocumentTheme(false);
-            break;
-        case "system": {
-            const isDarkMode = await window.themeMode.system();
-            updateDocumentTheme(isDarkMode);
-            break;
+    try {
+        switch (newTheme) {
+            case "dark":
+                await window.themeMode?.dark();
+                updateDocumentTheme(true);
+                break;
+            case "light":
+                await window.themeMode?.light();
+                updateDocumentTheme(false);
+                break;
+            case "system": {
+                const isDarkMode = await window.themeMode?.system() || false;
+                updateDocumentTheme(isDarkMode);
+                break;
+            }
         }
+        localStorage.setItem(THEME_KEY, newTheme);
+    } catch (error) {
+        console.error('Error setting theme:', error);
+        // Fallback to just updating the document theme
+        updateDocumentTheme(newTheme === 'dark');
+        localStorage.setItem(THEME_KEY, newTheme);
     }
-    localStorage.setItem(THEME_KEY, newTheme);
 }
 
 export async function toggleTheme() {
-    const isDarkMode = await window.themeMode.toggle();
-    const newTheme = isDarkMode ? "dark" : "light";
-    updateDocumentTheme(isDarkMode);
-    localStorage.setItem(THEME_KEY, newTheme);
+    try {
+        const isDarkMode = await window.themeMode?.toggle() || false;
+        const newTheme = isDarkMode ? "dark" : "light";
+        updateDocumentTheme(isDarkMode);
+        localStorage.setItem(THEME_KEY, newTheme);
+    } catch (error) {
+        console.error('Error toggling theme:', error);
+        const currentTheme = localStorage.getItem(THEME_KEY) as ThemeMode | null;
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        updateDocumentTheme(newTheme === 'dark');
+        localStorage.setItem(THEME_KEY, newTheme);
+    }
 }
 
 export async function syncThemeWithLocal() {
-    const { local } = await getCurrentTheme();
-    if (!local) {
-        setTheme("system");
-        return;
+    try {
+        const { local } = await getCurrentTheme();
+        if (!local) {
+            await setTheme("system");
+            return;
+        }
+        await setTheme(local);
+    } catch (error) {
+        console.error('Error syncing theme with local:', error);
     }
-    await setTheme(local);
 }
 
 function updateDocumentTheme(isDarkMode: boolean) {
