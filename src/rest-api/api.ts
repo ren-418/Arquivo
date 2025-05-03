@@ -77,10 +77,11 @@ export const addEvent = async (eventData: AddEventPayload): Promise<any> => {
 
 // Function to delete an event
 export const deleteEvent = async (eventId: string): Promise<any> => {
+
     try {
         const response = await api.delete(`/event?id=${eventId}`);
         return response.data;
-    } catch (error) {
+    } catch (error) { 
         console.error('Error deleting event:', error);
         throw error;
     }
@@ -88,42 +89,41 @@ export const deleteEvent = async (eventId: string): Promise<any> => {
 
 
 // History API Service
-const API_URL = '/api/history';
 export const HistoryService = {
 
     // Get all histories
     async getAllHistories() {
-        const response = await api.get(API_URL);
+        const response = await api.get('/history');
         return response.data;
     },
 
     // Get history by ID
     async getHistoryById(id: string) {
-        const response = await api.get(`${API_URL}/${id}`);
+        const response = await api.get(`/history/${id}`);
         return response.data;
     },
 
     // Delete history
     async deleteHistory(id: string) {
-        const response = await api.delete(`${API_URL}/${id}`);
+        const response = await api.delete(`/history/${id}`);
         return response.data;
     },
 
     // Get queue data for a history
     async getQueueData(historyId: string) {
-        const response = await api.get(`${API_URL}/${historyId}/queue`);
+        const response = await api.get(`/queue-history`);
         return response.data;
     },
 
     // Get cart data for a history
     async getCartData(historyId: string) {
-        const response = await api.get(`${API_URL}/${historyId}/carts`);
+        const response = await api.get(`/cart-history`);
         return response.data;
     },
 
     // Get checkout data for a history
     async  getCheckoutData(historyId: string) {
-        const response = await api.get(`${API_URL}/${historyId}/checkouts`);
+        const response = await api.get(`/checkout-history`);
         return response.data;
     }
 };

@@ -24,7 +24,7 @@ export const fetchPresaleCodeSets = async (): Promise<{ presales: PresaleCodeSet
 export const fetchPresaleCodeSetDetail = async (id: number): Promise<{ presale: PresaleCodeSetDetail }> => {
     try {
         const response = await api.get(`/presales/${id}`);
-        return response.data;
+        return response.data.presale;
     } catch (error) {
         console.error(`Error fetching presale code set detail for ID ${id}:`, error);
         throw error;
