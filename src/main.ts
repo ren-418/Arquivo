@@ -9,61 +9,58 @@ import {
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
 
-const inDevelopment = process.env.NODE_ENV === "development";
-
 function createWindow() {
-  const preload = inDevelopment
-    ? path.join(__dirname, "../src/preload.js")
-    : path.join(__dirname, "preload.js");
-  
+  // Always use the built preload script
+  const preload = path.join(process.cwd(), "dist/preload/preload.js");
+
+  console.log('Electron main __dirname:', __dirname);
+  console.log('Electron main process.cwd():', process.cwd());
   console.log('Preload script path:', preload);
-  console.log('Development mode:', inDevelopment);
-  
+
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     webPreferences: {
-      devTools: inDevelopment,
+      devTools: true, // Enable devtools for debugging
       contextIsolation: true,
       nodeIntegration: false,
       nodeIntegrationInSubFrames: false,
       preload: preload,
     },
   });
-  registerListeners(mainWindow);
-  /*
-    if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-    } else {
-      mainWindow.loadFile(
-        path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`),
-      );
-    }*/
-  mainWindow.loadURL("http://localhost:5173/login")
 
+  registerListeners(mainWindow);
+
+  // Always load the built HTML file
+  mainWindow.loadFile(path.join(process.cwd(), "renderer/main_window/index.html"));
 }
 
 async function installExtensions() {
   try {
     const result = await installExtension(REACT_DEVELOPER_TOOLS);
     console.log(`Extensions installed successfully: ${result.name}`);
-  } catch {
-    console.error("Failed to install extensions");
+  } catch (err) {
+    console.error("Failed to install extensions:", err);
   }
 }
 
-app.whenReady().then(createWindow).then(installExtensions);
+// Only run Electron-specific code if we're in an Electron environment
+if (process.versions.electron) {
+  app.whenReady().then(createWindow).then(installExtensions);
 
-//osX only
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
-});
+  // Quit when all windows are closed, except on macOS
+  app.on("window-all-closed", () => {
+    if (process.platform !== "darwin") {
+      app.quit();
+    }
+  });
 
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
-});
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+}
 //osX only ends
+
+const pkg = require(path.join(process.cwd(), 'package.json'));

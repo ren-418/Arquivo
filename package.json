@@ -6,6 +6,7 @@
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {
+    "postinstall": "yarn build && yarn build --config vite.preload.config.ts",
     "start": "electron-forge start",
     "dev:web": "vite --config vite.renderer.config.mts --host 0.0.0.0",
     "build": "vite build",

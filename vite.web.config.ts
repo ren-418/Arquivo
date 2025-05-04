@@ -21,16 +21,16 @@ export default defineConfig({
       }
     ]
   },
-  base: process.env.NODE_ENV === 'production' ? './' : '/',
   server: {
     port: 5173,
+    host: '0.0.0.0',
     strictPort: true,
     hmr: {
       port: 5173
     }
   },
   build: {
-    outDir: 'renderer/main_window',
+    outDir: 'dist/web',
     emptyOutDir: true,
     rollupOptions: {
       input: {
@@ -38,4 +38,4 @@ export default defineConfig({
       }
     }
   }
-});
+}); 
