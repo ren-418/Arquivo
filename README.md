@@ -4,6 +4,18 @@ A modern Electron-based dashboard application built with React, TypeScript, and 
 
 ## Quick Start
 
+### 1. Create a .env file
+
+Before building or running the application, create a `.env` file in the root of your project with the following content:
+
+```env
+VITE_BACKEND_API=http://your.api.url
+```
+
+Replace `http://your.api.url` with the actual URL of your backend API. This environment variable is required for both web and Electron versions to communicate with your backend.
+
+---
+
 ### Using Yarn
 1. Install dependencies:
 ```bash
