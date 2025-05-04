@@ -1,15 +1,12 @@
 import axios from 'axios';
 import { AddEventPayload, EventsResponse, Event } from '@/@types';
 
-
-// Create an axios instance with default configuration
 const api = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_API,
     headers: {
         'Content-Type': 'application/json',
     },
 });
-
 
 // Function to fetch all events
 export const fetchEvents = async (): Promise<EventsResponse> => {
@@ -21,6 +18,7 @@ export const fetchEvents = async (): Promise<EventsResponse> => {
         throw error;
     }
 };
+
 
 // Function to fetch a single event by ID
 export const fetchEventById = async (eventId: string): Promise<{ task: Event }> => {

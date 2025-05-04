@@ -5,6 +5,7 @@ const { MakerRpm } = require("@electron-forge/maker-rpm");
 const { VitePlugin } = require("@electron-forge/plugin-vite");
 const { FusesPlugin } = require("@electron-forge/plugin-fuses");
 const { FuseV1Options, FuseVersion } = require("@electron/fuses");
+const path = require("path");
 const pkg = require("./package.json");
 
 const config = {
@@ -12,6 +13,11 @@ const config = {
     executableName: pkg.name, 
     name: pkg.productName, 
     asar: true,
+    extraResource: ["./package.json"],
+    ignore: [
+      /^\/\.vite/,
+      /^\/node_modules\/(playwright|@playwright|chromium-bidi|electron-playwright-helpers|patchright|patchright-core|jszip|pako|yaku)/
+    ]
   },
   rebuildConfig: {},
   makers: [
