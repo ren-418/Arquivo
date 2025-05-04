@@ -23,6 +23,7 @@ coverage
 .vite/
 
 # Electron
+renderer/
 .cache
 .webpack/
 main.js

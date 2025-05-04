@@ -2,7 +2,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { HistoryEventDetail } from '@/@types/history';
-import { toast } from 'sonner';
 
 // API endpoint for history
 const API_URL = '/api/history';
@@ -27,7 +26,7 @@ export function useHistoryDetail(eventId: string) {
             const response = await axios.get(`${API_URL}/${eventId}`);
             setEventDetail(response.data);
         } catch (err) {
-            setError('Failed to load event details. Please try again later.');
+            // setError('Failed to load event details. Please try again later.');
             console.error('Error fetching event detail:', err);
             // toast.error('Failed to load event details');
         } finally {
