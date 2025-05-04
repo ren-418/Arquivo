@@ -14,7 +14,6 @@ yarn-error.log
 # React
 .DS_Store
 .env
-.env.*
 .vscode
 coverage
 *.pem
@@ -56,3 +55,5 @@ lerna-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+yarn.lock
