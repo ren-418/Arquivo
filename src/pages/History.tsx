@@ -39,11 +39,6 @@ const HistoryPage: React.FC = () => {
         // Implementation would go here
     };
 
-    // Handle add new event
-    const handleAddEvent = () => {
-        navigate({ to: '/events/new' });
-    };
-
     // Toggle filters visibility
     const toggleFilters = () => {
         setIsFiltersVisible(!isFiltersVisible);

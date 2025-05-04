@@ -108,19 +108,8 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
             });
     }, [checkedOutTickets, searchTerm]);
 
-    // Format purchase date
-    // const formatPurchaseDate = (date: Date) => {
-    //     return date.toLocaleString('en-US', {
-    //         month: 'short',
-    //         day: 'numeric',
-    //         hour: '2-digit',
-    //         minute: '2-digit'
-    //     });
-    // };
-
     // Handle ticket download
     const handleDownloadTicket = (ticket: CheckedOutTicket) => {
-        // toast.success(`Ticket for ${ticket.email} downloaded`);
         // Implement actual download functionality
         console.log(ticket);
         // download ticket

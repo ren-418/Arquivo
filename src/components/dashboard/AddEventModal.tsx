@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import {
     Form,
@@ -21,7 +20,6 @@ import {
 } from '@/components/ui/form';
 import { Loader2 } from 'lucide-react';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { AddEventPayload } from '@/@types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -89,14 +87,13 @@ const AddEventModal: React.FC<AddEventModalProps> = ({
                 <DialogHeader>
                     <DialogTitle className="text-2xl">Add New Event</DialogTitle>
                 </DialogHeader>
-
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 pt-4">
                         <FormField
                             control={form.control}
                             name="event_url"
                             render={({ field }) => (
-                                <FormItem>
+                                <FormItem> 
                                     <FormLabel>Event URL</FormLabel>
                                     <FormControl>
                                         <Input

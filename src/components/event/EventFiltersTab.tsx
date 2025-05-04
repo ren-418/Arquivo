@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import {
     Filter as FilterIcon,
@@ -26,9 +17,7 @@ import {
     GripVertical,  // Added GripVertical icon for drag handle
     Edit2
 } from 'lucide-react';
-import { motion, AnimatePresence, Reorder, useDragControls } from 'framer-motion'; // Added Reorder, useDragControls
-import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
+import { motion, AnimatePresence, Reorder } from 'framer-motion'; // Added Reorder,
 import {
     AlertDialog,
     AlertDialogAction,
@@ -52,8 +41,6 @@ import {
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -91,8 +78,6 @@ const EventFiltersTab: React.FC<EventFiltersTabProps> = ({ eventId, taskID, sect
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
     const [currentFilterTab, setCurrentFilterTab] = useState('form');
-    const [pageLoaded, setPageLoaded] = useState(false);
-    const [isDragging, setIsDragging] = useState(false);
     const [editingFilterId, setEditingFilterId] = useState<string | null>(null);
 
 

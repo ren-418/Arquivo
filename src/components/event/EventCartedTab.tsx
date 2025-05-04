@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
 import { formatCountdown } from '@/utils/utils';
 
 import {
@@ -341,27 +340,10 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             if (!ticket) {
                 throw new Error("Ticket not found");
             }
-
-            // Get the account id from the ticket
-            //const accountId = ticket.accountId;
-
-            console.log('ticket', ticket);
-
-            // Find the account index based on account id
-            // const accountIndex = accounts.findIndex(account => account.id === accountId);
-            // if (accountIndex === -1) {
-            //     throw new Error("Account not found");
-            // }
-
             await checkoutCartedTicket(eventId, ticket.id);
-            // toast.success("Ticket checked out successfully");
-
-            // No need to update cartedTickets state as it's derived from accounts
-            // which will be updated via the useEventDetail polling
 
         } catch (error) {
             console.error('Failed to checkout ticket:', error);
-            // toast.error("Failed to checkout ticket");
         } finally {
             setLoading(false);
         }
@@ -401,20 +383,18 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             setLoading(true);
             setBulkCheckoutConfirmationOpen(false);
 
-            // Process each selected ticket
             for (const email of selectedTickets) {
-                // Find the ticket and associated account id
+
                 const ticket = cartedTickets.find(t => t.email === email);
                 if (!ticket) continue;
 
-                // Get the account id from the ticket
+
                 const accountId = ticket.accountId;
 
-                // Find the account index based on account id
                 const accountIndex = accounts.findIndex(account => account.id === accountId);
                 if (accountIndex === -1) continue;
 
-                await checkoutCart(eventId, accountIndex);
+                // await checkoutCart(eventId, accountIndex);
             }
 
             // Clear selection
@@ -538,6 +518,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
 
    
     const EmptyCartPlaceholder = React.memo(() => (
+
         <TableRow>
             <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                 {loading ? (

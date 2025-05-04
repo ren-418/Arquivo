@@ -74,7 +74,6 @@ export const HistoryTable: React.FC<HistoryTableProps> = ({
     onRowClick,
     onDelete,
     onExport,
-    onDuplicate,
 }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortField, setSortField] = useState<SortField>('date');
