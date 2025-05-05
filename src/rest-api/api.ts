@@ -65,6 +65,7 @@ export const enableQB = async (eventId: string): Promise<{ task: Event }> => {
 // Function to add a new event
 export const addEvent = async (eventData: AddEventPayload): Promise<any> => {
     try {
+        console.log('eventData:', eventData);
         const response = await api.post('/event', eventData);
         return response.data;
     } catch (error) {

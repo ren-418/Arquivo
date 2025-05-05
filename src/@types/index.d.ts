@@ -84,9 +84,7 @@ export interface EventsResponse {
 
 export interface AddEventPayload {
     event_url: string;
-    min_amount_of_seats: number;
-    max_amount_of_seats: number;
-    number_of_accounts: number;
+    profile_ids: string[];
     delay: number;
 }
 
