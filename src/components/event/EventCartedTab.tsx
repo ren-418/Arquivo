@@ -119,8 +119,23 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     }
 
     useEffect(() => {
-        fetchCartedTickets();
-    }, [cartedTickets]);
+        let cancelled = false;
+        let timeout: NodeJS.Timeout;
+
+        const fetchLoop = async () => {
+            await fetchCartedTickets();
+            if (!cancelled) {
+                timeout = setTimeout(fetchLoop, 1000);
+            }
+        };
+
+        fetchLoop();
+
+        return () => {
+            cancelled = true;
+            clearTimeout(timeout);
+        };
+    }, [eventId]);
     
     const sortedTickets = useMemo(() => {
         
@@ -197,7 +212,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
 
     
     useEffect(() => {
-        const timer = setTimeout(() => setPageLoaded(true), 150);
+        const timer = setTimeout(() => setPageLoaded(true), 1000);
         return () => clearTimeout(timer);
     }, []);
     
