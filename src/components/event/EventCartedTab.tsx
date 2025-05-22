@@ -42,7 +42,7 @@ import {
     DialogClose
 } from '@/components/ui/dialog';
 import { useEventDetail } from '@/custom-hooks/use-event-detail';
-import { dropCartedTicket, checkoutCartedTicket,getCartedTickets } from '@/rest-api/carts-api';
+import { dropCartedTicket, checkoutCartedTicket,getCartedTickets, getWholeCartedTickets } from '@/rest-api/carts-api';
 
 
 
@@ -73,20 +73,24 @@ interface CartedTicket {
     city: string;
     postal_code: string;
     phone: string;
+    event_id?: string;
+    event_name?: string;
+    event_date?: string;
+    event_venue?: string;
 }
 
 
 interface CartedTabProps {
-    eventId: string;
+    eventId?: string;
 }
 
 
-type SortableColumn = 'email' | 'section' | 'row' | 'seats' | 'price' | 'deadline' | 'carts_remaining' | null;
+type SortableColumn = 'email' | 'section' | 'row' | 'seats' | 'price' | 'deadline' | 'carts_remaining' | 'event_name' | 'event_date' | 'event_venue' | null;
 
 
 const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     
-    const { accountsArray: accounts, isLoading: accountsLoading } = useEventDetail(eventId);
+    const { accountsArray: accounts, isLoading: accountsLoading } = useEventDetail(eventId || '');
 
     const [loading, setLoading] = useState(false);
     const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
@@ -109,13 +113,21 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     const [cartedTickets, setCartedTickets] = useState<CartedTicket[]>([]);
 
     const fetchCartedTickets = async () => {
-         const response = await getCartedTickets(eventId);
-         
-         const ticketsWithDate = response.map((ticket: any) => ({
-             ...ticket,
-             deadline: new Date(ticket.deadline)
-         }));
-         setCartedTickets(ticketsWithDate);
+        let response;
+        if (eventId) {
+            // Single event mode
+            response = await getCartedTickets(eventId);
+        } else {
+            // All events mode
+            console.log("Get all carted tickets");
+            response = await getWholeCartedTickets();
+        }
+        
+        const ticketsWithDate = response.map((ticket: any) => ({
+            ...ticket,
+            deadline: new Date(ticket.deadline)
+        }));
+        setCartedTickets(ticketsWithDate);
     }
 
     useEffect(() => {
@@ -173,6 +185,18 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                 case 'deadline':
                     aValue = a.deadline?.getTime();
                     bValue = b.deadline?.getTime();
+                    break;
+                case 'event_name':
+                    aValue = a.event_name?.toLowerCase();
+                    bValue = b.event_name?.toLowerCase();
+                    break;
+                case 'event_date':
+                    aValue = a.event_date ? new Date(a.event_date).getTime() : 0;
+                    bValue = b.event_date ? new Date(b.event_date).getTime() : 0;
+                    break;
+                case 'event_venue':
+                    aValue = a.event_venue?.toLowerCase();
+                    bValue = b.event_venue?.toLowerCase();
                     break;
                 default:
                     return 0;
@@ -535,7 +559,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
     const EmptyCartPlaceholder = React.memo(() => (
 
         <TableRow>
-            <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+            <TableCell colSpan={!eventId ? 11 : 8} className="text-center py-8 text-muted-foreground">
                 {loading ? (
                     <div className="flex flex-col items-center justify-center">
                         <Loader2 size={24} className="animate-spin mb-2" />
@@ -550,7 +574,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
             </TableCell>
         </TableRow>
     ));
-    const TicketRow = React.memo(({ ticket, index }: { ticket: CartedTicket, index: number }) => (
+    const TicketRow = React.memo(({ ticket, index, showEventInfo }: { ticket: CartedTicket, index: number, showEventInfo: boolean }) => (
         <TableRow
             key={ticket.email}
             className={`hover:bg-accent/10 transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/10'} ${pageLoaded ? `animate-fadeIn delay-${Math.min((index % 10) * 50, 500)}` : ''}`}
@@ -561,15 +585,18 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                     onCheckedChange={() => handleSelectTicket(ticket.email)}
                 />
             </TableCell>
-            <TableCell className="font-medium" >
-                {ticket.email.split('@')[0]}
-            </TableCell>
+            {showEventInfo && (
+                <>
+                    <TableCell className="font-medium">{ticket.event_name || '-'}</TableCell>
+                    <TableCell>{ticket.event_date ? new Date(ticket.event_date).toLocaleDateString() : '-'}</TableCell>
+                    <TableCell>{ticket.event_venue || '-'}</TableCell>
+                </>
+            )}
+            <TableCell className="font-medium">{ticket.email?.split('@')[0] || '-'}</TableCell>
             <TableCell>
                 <div className="flex items-center">
-                    <Badge variant="outline" className="bg-primary/10">
-                        {ticket.section}
-                    </Badge>
-                    <span className="ml-2 text-muted-foreground">Row {ticket.row}</span>
+                    <Badge variant="outline" className="bg-primary/10">{ticket.section || '-'}</Badge>
+                    <span className="ml-2 text-muted-foreground">Row {ticket.row || '-'}</span>
                     <Button
                         variant="ghost"
                         size="sm"
@@ -581,21 +608,21 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                 </div>
             </TableCell>
             <TableCell>
-                <span className="font-mono">{ticket.seats}</span>
+                <span className="font-mono">{Array.isArray(ticket.seats) ? ticket.seats.join(', ') : (ticket.seats || '')}</span>
             </TableCell>
             <TableCell>
-                <span className="font-medium text-green-500">${ticket.price.toFixed(2)}</span>
+                <span className="font-medium text-green-500">${typeof ticket.price === 'number' ? ticket.price.toFixed(2) : Number(ticket.price || 0).toFixed(2)}</span>
             </TableCell>
             <TableCell>
-                {/* <span className="font-medium text-green-500">${(ticket.price * ticket.seats.split(" ").length).toFixed(2)}</span> */}
+                {/* Optionally, you can calculate total price if needed */}
             </TableCell>
             <TableCell>
-                <span className="font-medium">{ticket.carts_remaining}</span>
+                <span className="font-medium">{ticket.carts_remaining ?? '-'}</span>
             </TableCell>
             <TableCell>
-                <div className={`flex items-center ${getCountdownClass(ticket.deadline)}`}>
+                <div className={`flex items-center ${getCountdownClass(ticket.deadline instanceof Date ? ticket.deadline : new Date(ticket.deadline))}`}>
                     <Clock className="h-4 w-4 mr-1" />
-                    {formatCountdown(ticket.deadline)}
+                    {formatCountdown(ticket.deadline instanceof Date ? ticket.deadline : new Date(ticket.deadline))}
                 </div>
             </TableCell>
             <TableCell className="text-right">
@@ -740,6 +767,13 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                             <TableHeader>
                                 <TableRow className="bg-muted/50">
                                     <TableHead className="w-12"></TableHead>
+                                    {!eventId && (
+                                        <>
+                                            <SortableTableHead className='text-center' column="event_name">Event</SortableTableHead>
+                                            <SortableTableHead className='text-center' column="event_date">Date</SortableTableHead>
+                                            <SortableTableHead className='text-center' column="event_venue">Venue</SortableTableHead>
+                                        </>
+                                    )}
                                     <SortableTableHead className='text-center' column="email">Email</SortableTableHead>
                                     <SortableTableHead className='text-center' column="section">Location</SortableTableHead>
                                     <SortableTableHead className='text-center' column="seats">Seats</SortableTableHead>
@@ -753,7 +787,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                             <TableBody>
                                 {accountsLoading ? (
                                     <TableRow>
-                                        <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                                        <TableCell colSpan={!eventId ? 11 : 8} className="text-center py-8 text-muted-foreground">
                                             <div className="flex flex-col items-center justify-center">
                                                 <Loader2 size={24} className="animate-spin mb-2" />
                                                 <span>Loading carted tickets...</span>
@@ -768,6 +802,7 @@ const CartedTab: React.FC<CartedTabProps> = React.memo(({ eventId }) => {
                                             key={`${ticket.email}-${ticket.accountId}`}
                                             ticket={ticket}
                                             index={index}
+                                            showEventInfo={!eventId}
                                         />
                                     ))
                                 )}

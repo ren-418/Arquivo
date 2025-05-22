@@ -9,6 +9,7 @@ import EventDetail from "@/pages/EventDetail";
 import HistoryPage from "@/pages/History";
 import HistoryDetailPage from "@/pages/HistoryDetailPage";
 import ProfileDetails from "@/pages/ProfileDetails";
+import Carts from "@/pages/Carts";
 
 export const HomeRoute = createRoute({
   getParentRoute: () => RootRoute,
@@ -32,6 +33,12 @@ export const ProfilesRoute = createRoute({
   getParentRoute: () => RootRoute,
   path: "/profiles",
   component: Profiles,
+});
+
+export const CartsRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/carts",
+  component: Carts,
 });
 
 export const PresalesRoute = createRoute({
@@ -71,6 +78,7 @@ export const rootTree = RootRoute.addChildren([
   DashboardRoute,
   ProfilesRoute,
   PresalesRoute,
+  CartsRoute,
   EventRoute,
   HistoryRoute,
   HistoryDetailRoute,

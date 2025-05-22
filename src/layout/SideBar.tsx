@@ -1,6 +1,6 @@
 import React from 'react';
 import { cn } from '@/utils/utils';
-import { LayoutDashboard, Users, Ticket, History } from 'lucide-react';
+import { LayoutDashboard, Users, Ticket, History, ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ThemeToggle from '@/components/theme/ThemeToggle';
 import { Link, useLocation } from '@tanstack/react-router';
@@ -55,6 +55,11 @@ const Sidebar: React.FC = () => {
             href: '/profiles',
             title: 'Profiles',
             icon: <Users className="h-5 w-5" />,
+        },
+        {
+            href: '/carts',
+            title: 'Carts',
+            icon: <ShoppingCart className="h-4 w-4" />
         },
         {
             href: '/presale-codes',

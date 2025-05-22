@@ -8,6 +8,13 @@ const api = axios.create({
     },
 });
 
+export const cartsApi = axios.create({
+    baseURL: import.meta.env.VITE_BACKEND_API_CARTS,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
 // Function to fetch all events
 export const fetchEvents = async (): Promise<EventsResponse> => {
     try {

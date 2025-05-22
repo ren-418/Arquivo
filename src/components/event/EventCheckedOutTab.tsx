@@ -27,6 +27,7 @@ import { useEventDetail } from '@/custom-hooks/use-event-detail';
 import { Input } from '@/components/ui/input';
 import TruncatedTextCell from '../TruncatedTextCell';
 import { getCheckedOutTickets } from '@/rest-api/checkout-api';
+import { getWholeCheckedOutTickets } from '@/rest-api/carts-api';
 
 interface CheckedOutTicket {
     email: string;
@@ -38,51 +39,72 @@ interface CheckedOutTicket {
     orderId: string;
     map: string;
     message: string;
+    event_id?: string;
+    event_name?: string;
+    event_date?: string;
+    event_venue?: string;
 }
 
 interface CheckedOutTabProps {
-    eventId: string;
+    eventId?: string;
 }
 
-const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
-    const { accountsArray: accounts, eventInfo } = useEventDetail(eventId);
+const getCheckedOutColSpan = (eventId?: string) => {
+    // Event, Date, Venue, Account, Location, Seats, Order ID, Price, Message, Actions
+    return eventId ? 9 : 12;
+};
 
-    // State management
+const EmptyTicketsPlaceholder = ({ eventId }: { eventId?: string }) => (
+    <TableRow>
+        <TableCell colSpan={getCheckedOutColSpan(eventId)} className="py-24">
+            <div className="flex flex-col items-center justify-center h-full min-h-[200px]">
+                <CheckSquare size={24} className="mb-2 opacity-50" />
+                <span className="text-muted-foreground">No checked out tickets found</span>
+            </div>
+        </TableCell>
+    </TableRow>
+);
+
+const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
+    const { accountsArray: accounts, eventInfo } = useEventDetail(eventId || '');
+
     const [loading, setLoading] = useState(true);
     const [checkedOutTickets, setCheckedOutTickets] = useState<CheckedOutTicket[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTicketForMap, setSelectedTicketForMap] = useState<CheckedOutTicket | null>(null);
 
-
     const processCheckedOutTickets = async () => {
         setLoading(true);
         try {
-            if (accounts.length === 0) {
-                setLoading(false);
-                return;
-            }
+           
 
-            const tickets: CheckedOutTicket[] = await getCheckedOutTickets(eventId);
+            let tickets: CheckedOutTicket[];
+            if (eventId) {
+                console.log('Getting checked out tickets for event', eventId);
+                // Single event mode
+                tickets = await getCheckedOutTickets(eventId);
+            } else {
+                console.log('Getting all checked out tickets');
+                // All events mode
+                tickets = await getWholeCheckedOutTickets();
+            }
             setCheckedOutTickets(tickets);
             setLoading(false);
         } catch (error) {
             console.error('Failed to process checked out tickets:', error);
-            // toast.error("Failed to load checked out tickets");
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        if (!accounts) {
-            return;
-        }
+      
+        console.log('Processing checked out tickets');
         processCheckedOutTickets();
-    }, [accounts, eventId]);
+    }, [ eventId]);
 
     const filteredTickets = useMemo(() => {
         // Create a Set of unique ticket keys
         const seen = new Set<string>();
-        console.log('checkedOutTickets', checkedOutTickets);
         return checkedOutTickets
             .filter(ticket => {
                 const key = `${ticket.email}-${ticket.orderId}`;
@@ -97,13 +119,14 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                 const seatsString = Array.isArray(ticket.seats) 
                     ? ticket.seats.join(', ') 
                     : String(ticket.seats || '');
-                
                 return (
                     ticket.email?.toLowerCase().includes(searchLower) ||
                     ticket.section?.toLowerCase().includes(searchLower) ||
                     ticket.row?.toLowerCase().includes(searchLower) ||
                     seatsString.toLowerCase().includes(searchLower) ||
-                    ticket.orderId?.toLowerCase().includes(searchLower)
+                    ticket.orderId?.toLowerCase().includes(searchLower) ||
+                    ticket.event_name?.toLowerCase().includes(searchLower) ||
+                    ticket.event_venue?.toLowerCase().includes(searchLower)
                 );
             });
     }, [checkedOutTickets, searchTerm]);
@@ -124,25 +147,6 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
     const openSeatMap = (ticket: CheckedOutTicket) => {
         setSelectedTicketForMap(ticket);
     };
-
-    // Empty tickets placeholder
-    const EmptyTicketsPlaceholder = () => (
-        <TableRow>
-            <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                {loading ? (
-                    <div className="flex flex-col items-center justify-center">
-                        <Loader2 size={24} className="animate-spin mb-2" />
-                        <span>Loading checked out tickets...</span>
-                    </div>
-                ) : (
-                    <div className="flex flex-col items-center justify-center">
-                        <CheckSquare size={24} className="mb-2 opacity-50" />
-                        <span>No checked out tickets found</span>
-                    </div>
-                )}
-            </TableCell>
-        </TableRow>
-    );
 
     return (
         <div className="space-y-6">
@@ -180,6 +184,13 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50">
+                                    {!eventId && (
+                                        <>
+                                            <TableHead>Event</TableHead>
+                                            <TableHead>Date</TableHead>
+                                            <TableHead>Venue</TableHead>
+                                        </>
+                                    )}
                                     <TableHead>Account</TableHead>
                                     <TableHead>Location</TableHead>
                                     <TableHead>Seats</TableHead>
@@ -191,23 +202,25 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                             </TableHeader>
                             <TableBody>
                                 {filteredTickets.length === 0 ? (
-                                    <EmptyTicketsPlaceholder />
+                                    <EmptyTicketsPlaceholder eventId={eventId} />
                                 ) : (
                                     filteredTickets.map((ticket, index) => (
                                         <TableRow
                                             key={`${ticket.email}-${ticket.orderId}`}
                                             className={`hover:bg-accent/10 transition-colors ${index % 2 === 0 ? 'bg-background' : 'bg-muted/10'}`}
                                         >
-                                            <TableCell className="font-medium">
-                                                {ticket.email.split('@')[0]}
-                                                <span className="text-muted-foreground">@{ticket.email.split('@')[1]}</span>
-                                            </TableCell>
+                                            {!eventId && (
+                                                <>
+                                                    <TableCell className="font-medium">{ticket.event_name || '-'}</TableCell>
+                                                    <TableCell>{ticket.event_date ? new Date(ticket.event_date).toLocaleDateString() : '-'}</TableCell>
+                                                    <TableCell>{ticket.event_venue || '-'}</TableCell>
+                                                </>
+                                            )}
+                                            <TableCell className="font-medium">{ticket.email?.split('@')[0] || '-'}</TableCell>
                                             <TableCell>
                                                 <div className="flex items-center">
-                                                    <Badge variant="outline" className="bg-primary/10">
-                                                        {ticket.section}
-                                                    </Badge>
-                                                    <span className="ml-2 text-muted-foreground">Row {ticket.row}</span>
+                                                    <Badge variant="outline" className="bg-primary/10">{ticket.section || '-'}</Badge>
+                                                    <span className="ml-2 text-muted-foreground">Row {ticket.row || '-'}</span>
                                                     {ticket.map && (
                                                         <Button
                                                             variant="ghost"
@@ -221,15 +234,13 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                                                 </div>
                                             </TableCell>
                                             <TableCell>
-                                                <span className="font-mono">{ticket.seats}</span>
+                                                <span className="font-mono">{Array.isArray(ticket.seats) ? ticket.seats.join(', ') : (ticket.seats || '')}</span>
                                             </TableCell>
                                             <TableCell>
-                                                <div className="text-muted-foreground text-sm">
-                                                    {ticket.orderId}
-                                                </div>
+                                                <div className="text-muted-foreground text-sm">{ticket.orderId || '-'}</div>
                                             </TableCell>
                                             <TableCell>
-                                                <span className="font-medium text-green-500">${ticket.price.toFixed(2)}</span>
+                                                <span className="font-medium text-green-500">${typeof ticket.price === 'number' ? ticket.price.toFixed(2) : Number(ticket.price || 0).toFixed(2)}</span>
                                             </TableCell>
                                             <TruncatedTextCell text={ticket.message} maxLength={90} />
                                             <TableCell className="text-right">
@@ -274,7 +285,6 @@ const CheckedOutTab: React.FC<CheckedOutTabProps> = ({ eventId }) => {
                                 onError={(e) => {
                                     const target = e.target as HTMLImageElement;
                                     target.src = '/placeholder-map.png';
-                                    // toast.error("Failed to load seat map");
                                 }}
                             />
                         ) : (
